@@ -30,13 +30,13 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   
-  // Redirect logged-in users away from /login
-  if (path === "/login" && session) {
+  // Redirect logged-in users away from /login and /signup
+  if ((path === "/login" || path === "/signup") && session) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // Protect all paths except /login
-  if (path !== "/login" && !session) {
+  // Protect all paths except /login and /signup
+  if (path !== "/login" && path !== "/signup" && !session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

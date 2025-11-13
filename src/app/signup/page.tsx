@@ -3,33 +3,49 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase/supabaseBrowser";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async () => {
+  const handleSignUp = async () => {
     setError(null);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    // Create user in Supabase Auth
+    // const { data, error } = await supabase.auth.signUp({
+    //   email,
+    //   password,
+    // });
 
-    if (error) {
-      setError(error.message);
-      return;
-    }
+    // if (error) {
+    //   setError(error.message);
+    //   return;
+    // }
 
-    router.push("/"); // Redirect to home/dashboard after login
+    // // Insert user profile into 'users' table
+    // await supabase.from("users").insert({
+    //   id: data.user?.id,
+    //   email,
+    //   full_name: fullName,
+    //   role: "customer",
+    // });
+
+    router.push("/login"); // Redirect to login page
   };
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
+      <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
       {error && <p className="text-red-500 mb-2">{error}</p>}
+      <input
+        className="w-full p-2 mb-2 border rounded"
+        type="text"
+        placeholder="Full Name"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+      />
       <input
         className="w-full p-2 mb-2 border rounded"
         type="email"
@@ -46,16 +62,10 @@ export default function LoginPage() {
       />
       <button
         className="w-full bg-blue-600 text-white p-2 rounded"
-        onClick={handleLogin}
+        onClick={handleSignUp}
       >
-        Login
+        Sign Up
       </button>
-      <p className="text-center mt-4 text-sm">
-        Don&apos;t have an account?{" "}
-        <Link href="/signup" className="text-blue-600 hover:underline">
-          Sign up
-        </Link>
-      </p>
     </div>
   );
 }
