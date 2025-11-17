@@ -12,7 +12,10 @@ export default function SignUpPage() {
   const signupMutation = useSignup();
 
   const handleSignUp = () => {
-    signupMutation.mutate({ email, password, fullName });
+    signupMutation.mutate({
+      email, password, full_name: fullName,
+      id: "",
+    });
   };
 
   return (

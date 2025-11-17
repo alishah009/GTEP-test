@@ -3,7 +3,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase/supabaseBrowser";
 import { useRouter } from "next/navigation";
-import type { User } from "@/entity/User";
+import  { User } from "@/entity/User";
+import { Role } from "@/enum/User";
 
 // Login mutation
 export function useLogin() {
@@ -40,36 +41,24 @@ export function useSignup() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async ({
-      email,
-      password,
-      fullName,
-    }: {
-      email: string;
-      password: string;
-      fullName: string;
-    }) => {
+    mutationFn: async (user: User) => {
       // Create user in Supabase Auth
       const { data: authData, error: authError } =
         await supabase.auth.signUp({
-          email,
-          password,
+          email: user.email!,
+          password: user.password!,
         });
         
       if (authError) throw authError;
 
       // Insert user profile into 'users' table
       if (authData.user?.id) {
-        const userData: Pick<User, "id" | "full_name" | "role"> = {
-          id: authData.user.id,
-          full_name: fullName,
-          role: "customer",
-        };
+       
         
         const { error: profileError } = await supabase
           .from("users")
           // @ts-expect-error - Supabase type inference issue with users table
-          .insert(userData);
+          .insert({...user,role: Role.CUSTOMER});
 
         if (profileError) throw profileError;
         throw 'error'
