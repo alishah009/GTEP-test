@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase/supabaseBrowser'
 import { useRouter } from 'next/navigation'
 import { User } from '@/entity/User'
@@ -20,11 +20,6 @@ export function useLogin(messageApi: MessageInstance) {
       })
 
       if (error) {
-        messageApi.open({
-          key: 'LoginResponse',
-          type: 'error',
-          content: error.message
-        })
         throw error
       }
       return data
@@ -45,12 +40,20 @@ export function useLogin(messageApi: MessageInstance) {
         type: 'loading',
         content: 'loading...'
       })
+    },
+    onError: (error) => {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      messageApi.open({
+        key: 'LoginResponse',
+        type: 'error',
+        content: errorMessage
+      })
     }
   })
 }
 
 // Signup mutation
-export function useSignup() {
+export function useSignup(messageApi: MessageInstance) {
   const queryClient = useQueryClient()
   const router = useRouter()
 
@@ -61,9 +64,9 @@ export function useSignup() {
         email: user.email!,
         password: user.password!
       })
-
-      if (authError) throw authError
-
+      if (authError) {
+        throw authError
+      }
       // Insert user profile into 'users' table
       if (authData.user?.id) {
         const { error: profileError } = await supabase
@@ -71,22 +74,41 @@ export function useSignup() {
           // @ts-expect-error - Supabase type inference issue with users table
           .insert({ ...user, role: Role.CUSTOMER })
 
-        if (profileError) throw profileError
-        throw 'error'
+        if (profileError) {
+          throw profileError
+        }
       }
-
       return authData
     },
     onSuccess: () => {
-      // Invalidate and refetch session
-      queryClient.invalidateQueries({ queryKey: ['session'] })
+      messageApi.open({
+        key: 'SignupResponse',
+        type: 'success',
+        content: 'Signup Successfully'
+      })
       router.push('/login')
+      queryClient.invalidateQueries({ queryKey: ['session'] })
+    },
+    onMutate: () => {
+      messageApi.open({
+        key: 'SignupResponse',
+        type: 'loading',
+        content: 'loading...'
+      })
+    },
+    onError: (error) => {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      messageApi.open({
+        key: 'SignupResponse',
+        type: 'error',
+        content: errorMessage
+      })
     }
   })
 }
 
 // Logout mutation
-export function useLogout() {
+export function useLogout(messageApi: MessageInstance) {
   const queryClient = useQueryClient()
   const router = useRouter()
 
@@ -99,32 +121,21 @@ export function useLogout() {
       // Clear session from cache
       queryClient.setQueryData(['session'], null)
       router.push('/login')
-    }
-  })
-}
-
-// Get current session
-export function useSession() {
-  return useQuery({
-    queryKey: ['session'],
-    queryFn: async () => {
-      const {
-        data: { session }
-      } = await supabase.auth.getSession()
-      return session
-    }
-  })
-}
-
-// Get current user
-export function useUser() {
-  return useQuery({
-    queryKey: ['user'],
-    queryFn: async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser()
-      return user
+    },
+    onMutate: () => {
+      messageApi.open({
+        key: 'LogoutResponse',
+        type: 'loading',
+        content: 'loading...'
+      })
+    },
+    onError: (error) => {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      messageApi.open({
+        key: 'LogoutResponse',
+        type: 'error',
+        content: errorMessage
+      })
     }
   })
 }

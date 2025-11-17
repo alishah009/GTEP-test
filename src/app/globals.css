@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -10,6 +10,38 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Brand / semantic colors */
+  --color-primary-25: #f5f8ff;
+  --color-primary-50: #eef4ff;
+  --color-primary-100: #e0eaff;
+  --color-primary-200: #c7d7fe;
+  --color-primary-300: #a4bcfd;
+  --color-primary-500: #6172f3;
+  --color-primary-600: #444ce7;
+  --color-primary-700: #3538cd;
+  --color-primary-800: #2d31a6;
+
+  --color-success-50: #ecfdf3;
+  --color-success-200: #a6f4c5;
+  --color-success-500: #12b76a;
+  --color-success-600: #039855;
+  --color-success-700: #027a48;
+
+  --color-error-50: #fef3f2;
+  --color-error-100: #fee4e2;
+  --color-error-200: #fecdca;
+  --color-error-500: #f04438;
+  --color-error-600: #d92d20;
+  --color-error-700: #b42318;
+
+  /* Box shadows used by buttons & inputs */
+  --shadow-ButtonPrimary: 0px 1px 2px rgba(15, 23, 42, 0.08);
+  --shadow-ButtonFocus: 0px 0px 0px 4px rgba(68, 76, 231, 0.25);
+  --shadow-ShadowError100: 0px 0px 0px 4px rgba(217, 45, 32, 0.25);
+  --shadow-ShadowGray100: 0px 1px 3px rgba(15, 23, 42, 0.1);
+  --shadow-ShadowPrimary100: 0px 0px 0px 4px rgba(68, 76, 231, 0.18);
+  --shadow-ShadowSuccess100: 0px 0px 0px 4px rgba(3, 152, 85, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {

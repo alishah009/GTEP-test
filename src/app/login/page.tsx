@@ -1,6 +1,5 @@
 'use client'
 import Image from 'next/image'
-import { useState } from 'react'
 import Link from 'next/link'
 import { useLogin } from '@/hooks/mutation/useAuth'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -16,14 +15,9 @@ export default function LoginPage() {
   const methods = useForm<LoginFormType>({})
 
   const { handleSubmit } = methods
-
   const [messageApi, contextHolder] = message.useMessage()
+  const { mutateAsync, isPending } = useLogin(messageApi)
 
-  const { mutateAsync } = useLogin(messageApi)
-
-  // const handleLogin = () => {
-  //   loginMutation.mutate({ email, password })
-  // }
   const login = async ({ email, password }: LoginFormType) => {
     try {
       await mutateAsync({ email, password })
@@ -46,20 +40,20 @@ export default function LoginPage() {
       >
         {contextHolder}
 
-        {/* <Image
-          height={40}
-          width={100}
-          src='/assets/images/Kisaan-eng.svg'
-          className='mx-auto'
-          alt='logo'
-        ></Image> */}
-        <div className='text-lg font-medium'>Login</div>
+        <Image height={40} width={100} src='next.svg' className='mx-auto' alt='logo'></Image>
+        <div className='text-lg font-medium'>Log In</div>
         <FormProvider {...methods}>
           <InputField label='Email' type='email' name='email' required={true} />
           <InputField label='Password' type='password' name='password' required={true} />
           {contextHolder}
-          <Button buttonType='Primary' className='!w-full' type='submit'>
-            Login
+          <Button
+            buttonType='Primary'
+            className='!w-full'
+            type='submit'
+            disabled={isPending}
+            loading={isPending}
+          >
+            Log In
           </Button>
         </FormProvider>
       </form>
@@ -67,7 +61,7 @@ export default function LoginPage() {
       <p className='text-center mt-4 text-sm'>
         Don&apos;t have an account?{' '}
         <Link href='/signup' className='text-blue-600 hover:underline'>
-          Sign up
+          Sign Up
         </Link>
       </p>
     </div>

@@ -1,70 +1,69 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
-import { useSignup } from "@/hooks/mutation/useAuth";
+'use client'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useSignup } from '@/hooks/mutation/useAuth'
+import { FormProvider, useForm } from 'react-hook-form'
+import { InputField } from '@/ui/Atoms/Input/InputField'
+import { message } from 'antd'
+import { Button } from '@/ui/Atoms/Button'
+import { User } from '@/entity/User'
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
+  const methods = useForm<User>({})
 
-  const signupMutation = useSignup();
+  const { handleSubmit } = methods
+  const [messageApi, contextHolder] = message.useMessage()
+  const { mutateAsync, isPending } = useSignup(messageApi)
 
-  const handleSignUp = () => {
-    signupMutation.mutate({
-      email, password, full_name: fullName,
-      id: "",
-    });
-  };
+  const login = async ({ email, password, full_name }: User) => {
+    try {
+      await mutateAsync({ email, password, full_name, id: '' })
+    } catch {
+      // noImp
+    }
+  }
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
-      {signupMutation.isError && (
-        <p className="text-red-500 mb-2">
-          {signupMutation.error instanceof Error
-            ? signupMutation.error.message
-            : "An error occurred"}
-        </p>
-      )}
-      <input
-        className="w-full p-2 mb-2 border rounded"
-        type="text"
-        placeholder="Full Name"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
-        disabled={signupMutation.isPending}
-      />
-      <input
-        className="w-full p-2 mb-2 border rounded"
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        disabled={signupMutation.isPending}
-      />
-      <input
-        className="w-full p-2 mb-4 border rounded"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        disabled={signupMutation.isPending}
-      />
-      <button
-        className="w-full bg-blue-600 text-white p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-        onClick={handleSignUp}
-        disabled={signupMutation.isPending}
+    <div className='max-w-md mx-auto mt-20 p-6 bg-white rounded shadow'>
+      <form
+        onSubmit={handleSubmit(
+          (e) => {
+            login(e)
+          },
+          () => {
+            // noImp
+          }
+        )}
+        className='flex w-full flex-col items-center gap-[28px] self-stretch '
       >
-        {signupMutation.isPending ? "Signing up..." : "Sign Up"}
-      </button>
-      <p className="text-center mt-4 text-sm">
-        Already have an account?{" "}
-        <Link href="/login" className="text-blue-600 hover:underline">
-          Log in
+        {contextHolder}
+
+        <Image height={40} width={100} src='next.svg' className='mx-auto' alt='logo'></Image>
+        <div className='text-lg font-medium'>Sign Up</div>
+        <FormProvider {...methods}>
+          <InputField label='Full Name' name='full_name' required={true} />
+
+          <InputField label='Email' type='email' name='email' required={true} />
+          <InputField label='Password' type='password' name='password' required={true} />
+          {contextHolder}
+          <Button
+            buttonType='Primary'
+            className='!w-full'
+            type='submit'
+            disabled={isPending}
+            loading={isPending}
+          >
+            Sign Up
+          </Button>
+        </FormProvider>
+      </form>
+
+      <p className='text-center mt-4 text-sm'>
+        Already have an account?{' '}
+        <Link href='/login' className='text-blue-600 hover:underline'>
+          Log In
         </Link>
       </p>
     </div>
-  );
+  )
 }

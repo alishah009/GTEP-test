@@ -28,11 +28,11 @@ export type InputSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 
 const InputSizeConfig: InputSizes = {
   '2xl':
-    '!text-[18px]  !px-[28px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600',
-  lg: '!text-[16px] !px-[18px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600',
-  md: '!text-[14px] !px-[16px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600',
-  sm: '!text-[14px]   rounded-[8px] bg-white border-solid w-full focus:outline-green-600',
-  xl: '!text-[16px]  !px-[20px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600'
+    '!text-[18px]  !px-[28px] !py-[5px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600',
+  lg: '!text-[16px] !px-[18px] !py-[8px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600',
+  md: '!text-[15px] !px-[15px] !py-[7px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600',
+  sm: '!text-[14px] !px-[14px] !py-[5px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600',
+  xl: '!text-[18px] !px-[20px] !py-[9px] rounded-[8px] bg-white border-solid w-full focus:outline-green-600'
 }
 
 export const Input = ({
@@ -79,9 +79,10 @@ export const Input = ({
         type={suitableType(fieldType)}
         prefix={prefixComponent}
         suffix={suffixComponent}
+        status={error ? 'error' : undefined}
         classNames={restClasses}
-        className={cn(InputSizeConfig[inputSize || 'sm'], className, {
-          'border-red-500 focus:border-red-500 hover:!border-red-500 focus:shadow-ShadowError100 AddOnStyle':
+        className={cn(InputSizeConfig[inputSize || 'md'], className, {
+          '!border-red-500 focus:!border-red-500 hover:!border-red-500 focus:shadow-ShadowError100 AddOnStyle':
             error
         })}
       />

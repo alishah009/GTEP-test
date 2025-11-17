@@ -1,7 +1,6 @@
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
 import { CustomInputProps, Input } from '@/ui/Atoms/Input/Input'
 import { InputFieldClassNames } from '@/ui/Atoms/Input/utils/InputConfig'
-
 import { cn } from '@/ui/utils/cn'
 import { CommonInputProps } from 'rc-input/lib/interface'
 import { useEffect } from 'react'
@@ -69,7 +68,6 @@ export const InputField = <T extends FieldValues>({
       return undefined
     }
   }
-
 
   return (
     <Responsive
