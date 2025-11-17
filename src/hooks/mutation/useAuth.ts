@@ -1,120 +1,130 @@
-"use client";
+'use client'
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase/supabaseBrowser";
-import { useRouter } from "next/navigation";
-import  { User } from "@/entity/User";
-import { Role } from "@/enum/User";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { supabase } from '@/lib/supabase/supabaseBrowser'
+import { useRouter } from 'next/navigation'
+import { User } from '@/entity/User'
+import { Role } from '@/enum/User'
+import { MessageInstance } from 'antd/es/message/interface'
 
 // Login mutation
-export function useLogin() {
-  const queryClient = useQueryClient();
-  const router = useRouter();
+export function useLogin(messageApi: MessageInstance) {
+  const queryClient = useQueryClient()
+  const router = useRouter()
 
   return useMutation({
-    mutationFn: async ({
-      email,
-      password,
-    }: {
-      email: string;
-      password: string;
-    }) => {
+    mutationFn: async ({ email, password }: { email: string; password: string }) => {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password,
-      });
+        password
+      })
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        messageApi.open({
+          key: 'LoginResponse',
+          type: 'error',
+          content: error.message
+        })
+        throw error
+      }
+      return data
     },
     onSuccess: () => {
       // Invalidate and refetch session
-      queryClient.invalidateQueries({ queryKey: ["session"] });
-      router.push("/");
+      queryClient.invalidateQueries({ queryKey: ['session'] })
+      messageApi.open({
+        key: 'LoginResponse',
+        type: 'success',
+        content: 'Login Successfully'
+      })
+      router.push('/')
     },
-  });
+    onMutate: () => {
+      messageApi.open({
+        key: 'LoginResponse',
+        type: 'loading',
+        content: 'loading...'
+      })
+    }
+  })
 }
 
 // Signup mutation
 export function useSignup() {
-  const queryClient = useQueryClient();
-  const router = useRouter();
+  const queryClient = useQueryClient()
+  const router = useRouter()
 
   return useMutation({
     mutationFn: async (user: User) => {
       // Create user in Supabase Auth
-      const { data: authData, error: authError } =
-        await supabase.auth.signUp({
-          email: user.email!,
-          password: user.password!,
-        });
-        
-      if (authError) throw authError;
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: user.email!,
+        password: user.password!
+      })
+
+      if (authError) throw authError
 
       // Insert user profile into 'users' table
       if (authData.user?.id) {
-       
-        
         const { error: profileError } = await supabase
-          .from("users")
+          .from('users')
           // @ts-expect-error - Supabase type inference issue with users table
-          .insert({...user,role: Role.CUSTOMER});
+          .insert({ ...user, role: Role.CUSTOMER })
 
-        if (profileError) throw profileError;
+        if (profileError) throw profileError
         throw 'error'
       }
 
-      return authData;
+      return authData
     },
     onSuccess: () => {
       // Invalidate and refetch session
-      queryClient.invalidateQueries({ queryKey: ["session"] });
-      router.push("/login");
-    },
-  });
+      queryClient.invalidateQueries({ queryKey: ['session'] })
+      router.push('/login')
+    }
+  })
 }
 
 // Logout mutation
 export function useLogout() {
-  const queryClient = useQueryClient();
-  const router = useRouter();
+  const queryClient = useQueryClient()
+  const router = useRouter()
 
   return useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
     },
     onSuccess: () => {
       // Clear session from cache
-      queryClient.setQueryData(["session"], null);
-      router.push("/login");
-    },
-  });
+      queryClient.setQueryData(['session'], null)
+      router.push('/login')
+    }
+  })
 }
 
 // Get current session
 export function useSession() {
   return useQuery({
-    queryKey: ["session"],
+    queryKey: ['session'],
     queryFn: async () => {
       const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      return session;
-    },
-  });
+        data: { session }
+      } = await supabase.auth.getSession()
+      return session
+    }
+  })
 }
 
 // Get current user
 export function useUser() {
   return useQuery({
-    queryKey: ["user"],
+    queryKey: ['user'],
     queryFn: async () => {
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      return user;
-    },
-  });
+        data: { user }
+      } = await supabase.auth.getUser()
+      return user
+    }
+  })
 }
-
