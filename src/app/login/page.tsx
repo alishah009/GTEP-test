@@ -26,10 +26,6 @@ export default function LoginPage() {
     }
   }
 
-  // ❌ Lint errors intentionally added:
-  const unusedVar = 123 // unused variable
-  console.log('Debug') // console.log not allowed by typical ESLint rules
-
   return (
     <div className='max-w-md mx-auto mt-20 p-6 bg-white rounded shadow'>
       <form
