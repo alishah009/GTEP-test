@@ -6,8 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
@@ -31,6 +38,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.2",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"
