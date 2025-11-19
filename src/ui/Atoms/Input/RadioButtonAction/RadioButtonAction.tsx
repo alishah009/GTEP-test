@@ -1,8 +1,5 @@
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
-import {
-  RadioButton,
-  Props as RadioProps
-} from '@/ui/Atoms/Input/RadioButton/RadioButton'
+import { RadioButton, Props as RadioProps } from '@/ui/Atoms/Input/RadioButton/RadioButton'
 import { FieldValues, Path } from 'react-hook-form'
 
 export interface Props<T> extends Omit<RadioProps<T, unknown>, 'constant'>, IResponsive {

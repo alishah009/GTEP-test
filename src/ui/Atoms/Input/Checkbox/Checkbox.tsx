@@ -2,8 +2,6 @@ import { CustomInputProps, Input } from '@/ui/Atoms/Input/Input'
 import { cn } from '@/ui/utils/cn'
 
 export const Checkbox = ({ label, classNames, ...rest }: CustomInputProps) => {
- 
-
   return (
     <Input
       disabled={rest.disabled}

@@ -35,7 +35,6 @@ const Button = ({
     )}
     onKeyDown={(e) => {
       if (!loading && onClick && !disabled && e.key === 'Enter') {
-         
         onClick(1 as any)
       }
     }}

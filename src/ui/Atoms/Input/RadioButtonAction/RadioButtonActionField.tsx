@@ -1,8 +1,5 @@
 import { Responsive } from '@/ui/Atoms/Grid/Responsive'
-import {
-  ChildrenProps,
-  RadioButtonField
-} from '@/ui/Atoms/Input/RadioButton/RadioButtonField'
+import { ChildrenProps, RadioButtonField } from '@/ui/Atoms/Input/RadioButton/RadioButtonField'
 import { FieldValues } from 'react-hook-form'
 
 export const RadioButtonActionField = <T extends FieldValues>({

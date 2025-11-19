@@ -1,4 +1,4 @@
-import { JSX } from "react"
+import { JSX } from 'react'
 
 export interface NativeButtonProps extends React.HTMLProps<HTMLButtonElement> {
   PrefixIcon?: JSX.Element

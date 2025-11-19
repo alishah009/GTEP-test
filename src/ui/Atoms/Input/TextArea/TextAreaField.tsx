@@ -1,9 +1,5 @@
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
-import {
-  ClassNames,
-  TextArea,
-  Props as TextAreaProps
-} from '@/ui/Atoms/Input/TextArea/TextArea'
+import { ClassNames, TextArea, Props as TextAreaProps } from '@/ui/Atoms/Input/TextArea/TextArea'
 import { InputFieldClassNames } from '@/ui/Atoms/Input/utils/InputConfig'
 import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 
@@ -36,7 +32,6 @@ export const TextAreaField = <T extends FieldValues>({
     formState: { errors }
   } = methods
 
-
   useEffect(() => {
     return () => {
       if (!name.includes('[')) {
@@ -64,7 +59,7 @@ export const TextAreaField = <T extends FieldValues>({
           <TextArea
             {...field}
             {...rest}
-            disabled={disabled }
+            disabled={disabled}
             label={label}
             required={required}
             classNames={restClasses}

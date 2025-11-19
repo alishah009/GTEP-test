@@ -50,8 +50,6 @@ export const MultiCheckBoxField = <T extends FieldValues>({
     return error || getNestedError(errors, name)
   }
 
-
-
   const { root, ...restClasses } = classNames
 
   return (

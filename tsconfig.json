@@ -18,9 +18,9 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",                // <-- Add this
+    "baseUrl": ".", // <-- Add this
     "paths": {
-      "@/*": ["src/*"]            // <-- Remove leading './'
+      "@/*": ["src/*"] // <-- Remove leading './'
     }
   },
   "include": [

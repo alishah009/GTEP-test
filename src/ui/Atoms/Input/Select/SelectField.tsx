@@ -35,7 +35,6 @@ export const SelectField = <T extends FieldValues>({
     formState: { errors }
   } = useFormContext()
 
-
   const getError = () => {
     return error || getNestedError(errors, name)
   }
@@ -69,7 +68,7 @@ export const SelectField = <T extends FieldValues>({
               classNames={restClasses}
               prefixComponent={prefixComponent}
               selectSize={selectSize}
-              disabled={disabled }
+              disabled={disabled}
               filterOption={(input, option) => {
                 return (
                   option?.props?.children?.props?.children

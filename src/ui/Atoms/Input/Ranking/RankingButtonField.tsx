@@ -22,7 +22,6 @@ export const RankingButtonField = ({
     formState: { errors },
     clearErrors
   } = methods
- 
 
   const getError = () => {
     return error || getNestedError(errors, name)
@@ -60,7 +59,7 @@ export const RankingButtonField = ({
             {...rest}
             control={methods.control}
             setValue={methods.setValue}
-            disabled={rest.disabled }
+            disabled={rest.disabled}
             label={label}
             classNames={restClasses}
             required={required}
