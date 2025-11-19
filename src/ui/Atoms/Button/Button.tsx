@@ -35,7 +35,7 @@ const Button = ({
     )}
     onKeyDown={(e) => {
       if (!loading && onClick && !disabled && e.key === 'Enter') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         onClick(1 as any)
       }
     }}

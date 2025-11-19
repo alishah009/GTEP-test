@@ -21,8 +21,7 @@ export const Checkbox = <T extends FieldValues>({
         resetField(name, { defaultValue: undefined })
       }
     }
-  }, [])
- 
+  }, [name, clearErrors, resetField])
 
   return (
     <InputField

@@ -2,6 +2,7 @@ import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
 import { CustomInputProps } from '@/ui/Atoms/Input/Input'
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputConfig, InputFieldClassNames } from '@/ui/Atoms/Input/utils/InputConfig'
+import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 import { Editor } from '@tinymce/tinymce-react'
 import { useEffect, useState } from 'react'
 import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
@@ -28,13 +29,7 @@ export const RichTextEditorField = <T extends FieldValues>({
   } = methods
 
   const getError = () => {
-    try {
-      return error || eval(`errors?.${name?.replaceAll('.', '?.')}?.message`)
-    } catch (err) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      errors
-      return undefined
-    }
+    return error || getNestedError(errors, name)
   }
 
   const [warning, setWarning] = useState<string | undefined>(undefined)

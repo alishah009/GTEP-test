@@ -1,6 +1,7 @@
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
 import { CustomInputProps, Input } from '@/ui/Atoms/Input/Input'
 import { InputFieldClassNames } from '@/ui/Atoms/Input/utils/InputConfig'
+import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 import { cn } from '@/ui/utils/cn'
 import { CommonInputProps } from 'rc-input/lib/interface'
 import { useEffect } from 'react'
@@ -57,16 +58,10 @@ export const InputField = <T extends FieldValues>({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setValue(name, null as any)
     }
-  }, [fieldValue, name, required])
+  }, [fieldValue, name, required, setValue])
 
   const getError = () => {
-    try {
-      return error || eval(`errors?.${name?.replaceAll('.', '?.')}?.message`)
-    } catch (err) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      errors
-      return undefined
-    }
+    return error || getNestedError(errors, name)
   }
 
   return (

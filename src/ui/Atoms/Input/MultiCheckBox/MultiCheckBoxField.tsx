@@ -1,5 +1,6 @@
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
 import { MultiCheckBox, TestProps } from '@/ui/Atoms/Input/MultiCheckBox/MultiCheckBox'
+import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 import { cn } from '@/ui/utils/cn'
 import { useEffect } from 'react'
 import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
@@ -42,18 +43,11 @@ export const MultiCheckBoxField = <T extends FieldValues>({
         clearErrors(name)
         resetField(name, { defaultValue: undefined })
       }
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      errors
     }
-  }, [])
+  }, [name, clearErrors, resetField, errors])
 
   const getError = () => {
-    try {
-      return error || eval(`errors?.${name?.replaceAll('.', '?.')}?.message`)
-    } catch (e) {
-      return undefined
-    }
+    return error || getNestedError(errors, name)
   }
 
 

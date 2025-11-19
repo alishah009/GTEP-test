@@ -1,6 +1,7 @@
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
 import { Props, Select } from '@/ui/Atoms/Input/Select/Select'
 import { InputFieldClassNames } from '@/ui/Atoms/Input/utils/InputConfig'
+import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 
 import { cn } from '@/ui/utils/cn'
 import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
@@ -36,13 +37,7 @@ export const SelectField = <T extends FieldValues>({
 
 
   const getError = () => {
-    try {
-      return error || eval(`errors?.${name?.replaceAll('.', '?.')}?.message`)
-    } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      errors
-      return undefined
-    }
+    return error || getNestedError(errors, name)
   }
 
   const { root, ...restClasses } = classNames

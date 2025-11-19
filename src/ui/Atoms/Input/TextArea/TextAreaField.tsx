@@ -5,6 +5,7 @@ import {
   Props as TextAreaProps
 } from '@/ui/Atoms/Input/TextArea/TextArea'
 import { InputFieldClassNames } from '@/ui/Atoms/Input/utils/InputConfig'
+import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 
 import { cn } from '@/ui/utils/cn'
 import { useEffect } from 'react'
@@ -38,21 +39,15 @@ export const TextAreaField = <T extends FieldValues>({
 
   useEffect(() => {
     return () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      errors
       if (!name.includes('[')) {
         clearErrors(name)
         resetField(name, { defaultValue: undefined })
       }
     }
-  }, [])
+  }, [name, clearErrors, resetField, errors])
 
   const getError = () => {
-    try {
-      return error || eval(`errors?.${name?.replaceAll('.', '?.')}?.message`)
-    } catch (e) {
-      return undefined
-    }
+    return error || getNestedError(errors, name)
   }
 
   const { root, ...restClasses } = classNames

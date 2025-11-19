@@ -4,6 +4,7 @@ import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
 
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
 import { InputFieldClassNames } from '@/ui/Atoms/Input/utils/InputConfig'
+import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 import { cn } from '@/ui/utils/cn'
 
 export interface ChildrenProps<T> extends Props<T, unknown>, IResponsive {
@@ -29,14 +30,7 @@ export const RadioButtonField = <T extends FieldValues>({
   } = methods
 
   const getError = () => {
-    try {
-      return error || eval(`errors?.${name?.replaceAll('.', '?.')}?.message`)
-    } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      errors
-
-      return undefined
-    }
+    return error || getNestedError(errors, name)
   }
   useEffect(() => {
     return () => {
@@ -44,7 +38,7 @@ export const RadioButtonField = <T extends FieldValues>({
         clearErrors(name)
       }
     }
-  }, [])
+  }, [name, clearErrors])
 
   const { root, ...restClasses } = classNames
 

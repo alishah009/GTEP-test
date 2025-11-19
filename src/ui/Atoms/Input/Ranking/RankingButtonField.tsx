@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { Responsive } from '@/ui/Atoms/Grid/Responsive'
+import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 
 import { cn } from '@/ui/utils/cn'
 
@@ -24,14 +25,7 @@ export const RankingButtonField = ({
  
 
   const getError = () => {
-    try {
-      return error || eval(`errors?.${name?.replaceAll('.', '?.')}?.message`)
-    } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      errors
-
-      return undefined
-    }
+    return error || getNestedError(errors, name)
   }
   useEffect(() => {
     return () => {
@@ -39,7 +33,7 @@ export const RankingButtonField = ({
         clearErrors(name)
       }
     }
-  }, [])
+  }, [name, clearErrors])
 
   const { root, ...restClasses } = classNames
 
