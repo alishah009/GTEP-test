@@ -15,7 +15,7 @@ export function useSession() {
 }
 
 // Get current user
-export function useUser() {
+export function useAuth() {
   return useQuery({
     queryKey: ['user'],
     queryFn: async () => {
