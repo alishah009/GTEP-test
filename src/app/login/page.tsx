@@ -6,6 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { InputField } from '@/ui/Atoms/Input/InputField'
 import { message } from 'antd'
 import { Button } from '@/ui/Atoms/Button'
+import { AuthLayout } from '@/layout/AuthLayout'
 
 type LoginFormType = {
   email: string
@@ -27,7 +28,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='max-w-md mx-auto mt-20 p-6 bg-white rounded shadow'>
+    <AuthLayout>
       <form
         onSubmit={handleSubmit(
           (e) => {
@@ -37,16 +38,29 @@ export default function LoginPage() {
             // noImp
           }
         )}
-        className='flex w-full flex-col items-center gap-[28px] self-stretch '
+        className='flex w-full flex-col items-center gap-[28px] self-stretch'
       >
         {contextHolder}
+        <Image height={40} width={160} src='/gtep.png' className='self-start' alt='logo' />
+        <div className='w-full text-left'>
+          <h1 className='mt-2 text-2xl font-semibold'>Welcome!</h1>
+          <p className='text-lg text-gray-500 '>Please sign in to continue</p>
+        </div>
 
-        <Image height={40} width={100} src='next.svg' className='mx-auto' alt='logo'></Image>
-        <div className='text-lg font-medium'>Log In</div>
         <FormProvider {...methods}>
           <InputField label='Email' type='email' name='email' required={true} />
-          <InputField label='Password' type='password' name='password' required={true} />
-          {contextHolder}
+          <div className='w-full space-y-2'>
+            <InputField label='Password' type='password' name='password' required={true} />
+            <div className='flex w-full justify-end text-sm text-gray-500'>
+              <Link
+                href='/forgot-password'
+                className='font-semibold text-primary-600 hover:text-primary-700'
+              >
+                Forgot password?
+              </Link>
+            </div>
+          </div>
+
           <Button
             buttonType='Primary'
             className='!w-full'
@@ -57,14 +71,17 @@ export default function LoginPage() {
             Log In
           </Button>
         </FormProvider>
-      </form>
+        <div className='text-center justify-between text-sm text-gray-500'>
+          <p>
+            New here?{' '}
+            <Link href='/signup' className='font-semibold text-primary-600 hover:text-primary-700'>
+              Create an account
+            </Link>
+          </p>
 
-      <p className='text-center mt-4 text-sm'>
-        Don&apos;t have an account?{' '}
-        <Link href='/signup' className='text-blue-600 hover:underline'>
-          Sign Up
-        </Link>
-      </p>
-    </div>
+          <div />
+        </div>
+      </form>
+    </AuthLayout>
   )
 }
