@@ -81,10 +81,15 @@ export const Input = ({
         suffix={suffixComponent}
         status={error ? 'error' : undefined}
         classNames={restClasses}
-        className={cn(InputSizeConfig[inputSize || 'md'], className, {
-          '!border-red-500 focus:!border-red-500 hover:!border-red-500 focus:shadow-ShadowError100 AddOnStyle':
-            error
-        })}
+        className={cn(
+          InputSizeConfig[inputSize || 'md'],
+          'hover:!border-primary-600 focus:!border-primary-600 focus:!ring-0 focus:!shadow-[0_0_0_4px_rgba(221,91,74,0.15)]',
+          className,
+          {
+            '!border-red-500 focus:!border-red-500 hover:!border-red-500 focus:shadow-ShadowError100 AddOnStyle':
+              error
+          }
+        )}
       />
     </FieldWrapper>
   )
