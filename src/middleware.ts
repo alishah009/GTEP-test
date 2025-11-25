@@ -1,6 +1,8 @@
 import { CookieOptions, createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { Role } from '@/enum/User'
+import { canRoleAccessPath } from '@/config/accessControl'
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
@@ -34,9 +36,26 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
+  const isAuthRoute = path === '/login' || path === '/signup'
+
   // Protect all paths except /login and /signup
-  if (path !== '/login' && path !== '/signup' && !session) {
+  if (!isAuthRoute && !session) {
     return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  if (session) {
+    const { data: profile } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', session.user.id)
+      .single()
+
+    const userRole = (profile?.role as Role | null) ?? null
+    const isAllowed = canRoleAccessPath(path, userRole)
+
+    if (!isAllowed) {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
   }
 
   return response

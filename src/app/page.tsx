@@ -1,21 +1,23 @@
 'use client'
 
 import { useAuth } from '@/context/AuthContext'
+import { AppLayout } from '@/layout/AppLayout/AppLayout'
 
 export default function Page() {
-  const { user, loading, logout } = useAuth()
+  const { user, loading } = useAuth()
 
   if (loading) return <p>Loading...</p>
-  console.log('user', user)
+
+  const displayName = user?.full_name ?? user?.email ?? 'User'
+
   return (
-    <div className='p-6'>
-      <h1 className='text-2xl font-semibold'>Dashboard</h1>
-
-      <p className='mt-4 text-lg'>Hello, {user?.full_name}</p>
-
-      <button onClick={logout} className='mt-6 rounded bg-red-600 px-4 py-2 text-white'>
-        Logout
-      </button>
-    </div>
+    <AppLayout>
+      <section className='rounded-2xl border border-gray-200 bg-white p-6 shadow-sm'>
+        <h1 className='text-2xl font-semibold text-gray-900'>Welcome back, {displayName}</h1>
+        <p className='mt-2 text-gray-600'>
+          This is the main dashboard area. Drop your widgets or page content here.
+        </p>
+      </section>
+    </AppLayout>
   )
 }
