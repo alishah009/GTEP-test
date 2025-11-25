@@ -7,4 +7,5 @@ export type User = {
   role?: Role
   created_at?: string
   password?: string
+  photo_url?: string
 }
