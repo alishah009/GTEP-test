@@ -67,11 +67,11 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       />
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex h-full w-64 flex-col border-r border-gray-200 bg-white transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-40 flex h-full w-64 flex-col bg-white transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full shadow-none'
         }`}
       >
-        <div className='flex items-center justify-between border-b border-gray-100 px-6 py-4'>
+        <div className='flex items-center justify-between  px-6 py-4'>
           <div className='flex items-center gap-3'>
             {user?.photo_url ? (
               <Image
@@ -159,7 +159,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
           </ul>
         </nav>
 
-        <div className='border-t border-gray-100 px-6 py-4'>
+        <div className='px-6 py-4'>
           {logout ? (
             <button
               type='button'

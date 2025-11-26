@@ -1,6 +1,13 @@
 import Image from 'next/image'
-import { BellOutlined, MenuOutlined, SearchOutlined } from '@ant-design/icons'
+import {
+  BellOutlined,
+  MenuOutlined,
+  MoonOutlined,
+  SearchOutlined,
+  SunOutlined
+} from '@ant-design/icons'
 import { Input } from 'antd'
+import { useTheme } from '@/context/ThemeContext'
 
 type AppNavbarProps = {
   onToggleSidebar: () => void
@@ -8,6 +15,7 @@ type AppNavbarProps = {
 
 export function AppNavbar({ onToggleSidebar }: AppNavbarProps) {
   const notificationCount = 16
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <header className='z-20 flex flex-shrink-0 items-center justify-between gap-6 border-b border-gray-200 bg-white px-6 py-3'>
@@ -32,14 +40,19 @@ export function AppNavbar({ onToggleSidebar }: AppNavbarProps) {
           />
         </div>
 
-        {/* <button
-          className='hidden rounded-full p-2 hover:bg-gray-100 lg:block'
+        <button
+          className='relative rounded-full p-3 '
           aria-label='Toggle theme'
+          onClick={toggleTheme}
         >
-          <Image src='/icons/sun.svg' alt='Toggle theme' width={20} height={20} />
-        </button> */}
+          {theme === 'dark' ? (
+            <MoonOutlined className='text-lg text-gray-700' />
+          ) : (
+            <SunOutlined className='text-lg text-gray-700' />
+          )}
+        </button>
 
-        <button className='relative rounded-full p-2 hover:bg-gray-100' aria-label='Notifications'>
+        <button className='relative rounded-full p-3 ' aria-label='Notifications'>
           <BellOutlined className='text-lg text-gray-700' />
           {notificationCount > 0 ? (
             <span className='absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary-500 px-1 text-xs font-semibold text-white'>
