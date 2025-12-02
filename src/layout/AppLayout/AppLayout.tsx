@@ -8,19 +8,19 @@ import { usePathname } from 'next/navigation'
 import { NAV_ITEMS, filterNavItemsByRole } from '@/config/accessControl'
 import { AppNavbar } from './AppNavbar'
 import { useAuth } from '@/context/AuthContext'
+import { useSpinner } from '@/context/SpinnerContext'
 
 type AppLayoutProps = {
   children: ReactNode
 }
 
-const getDesktopPreference = () =>
-  typeof window !== 'undefined' ? window.matchMedia('(min-width: 1024px)').matches : false
-
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const { user, loading, logout } = useAuth()
+  const { showSpinner, hideSpinner } = useSpinner()
 
-  const [isDesktop, setIsDesktop] = useState<boolean>(getDesktopPreference)
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(getDesktopPreference)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [allowSidebarAnimation, setAllowSidebarAnimation] = useState(false)
   const pathname = usePathname()
   const visibleNavItems = useMemo(
     () => filterNavItemsByRole(NAV_ITEMS, user?.role ?? null),
@@ -43,6 +43,11 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     }
   }, [])
 
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setAllowSidebarAnimation(true))
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
   const initials = useMemo(() => {
     if (!user?.full_name) return 'U'
     const parts = user.full_name.split(' ').filter(Boolean)
@@ -53,13 +58,22 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev)
   const closeSidebar = () => setIsSidebarOpen(false)
-  if (loading) return <p>Loading...</p>
+
+  useEffect(() => {
+    if (loading) {
+      showSpinner()
+    } else {
+      hideSpinner()
+    }
+  }, [hideSpinner, loading, showSpinner])
 
   return (
     <div className='flex h-screen overflow-hidden bg-gray-50 text-gray-900'>
       <button
         type='button'
-        className={`fixed inset-0 z-30 bg-black/30 transition-opacity lg:hidden ${
+        className={`fixed inset-0 z-30 bg-black/30 ${
+          allowSidebarAnimation ? 'transition-opacity' : ''
+        } lg:hidden ${
           isSidebarOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={closeSidebar}
@@ -67,9 +81,9 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       />
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex h-full w-64 flex-col bg-white transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full shadow-none'
-        }`}
+        className={`fixed inset-y-0 left-0 z-40 flex h-full w-64 flex-col bg-white ${
+          allowSidebarAnimation ? 'transition-transform duration-300 ease-in-out' : ''
+        } ${isSidebarOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full shadow-none'}`}
       >
         <div className='flex items-center justify-between  px-6 py-4'>
           <div className='flex items-center gap-3'>
@@ -181,7 +195,9 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       </aside>
 
       <div
-        className='flex h-full flex-1 flex-col overflow-hidden transition-[margin-left] duration-300 lg:ml-0'
+        className={`flex h-full flex-1 flex-col overflow-hidden ${
+          allowSidebarAnimation ? 'transition-[margin-left] duration-300' : ''
+        } lg:ml-0`}
         style={{ marginLeft: isDesktop ? (isSidebarOpen ? '16rem' : '0') : undefined }}
       >
         <AppNavbar onToggleSidebar={toggleSidebar} />

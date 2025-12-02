@@ -72,7 +72,13 @@ export function useSignup(messageApi: MessageInstance) {
         const { error: profileError } = await supabase
           .from('users')
           // @ts-expect-error - Supabase type inference issue with users table
-          .insert({ ...user, role: Role.CUSTOMER })
+          .insert({
+            id: authData.user.id,
+            full_name: user.full_name,
+            role: Role.CUSTOMER
+          })
+          .select()
+          .single()
 
         if (profileError) {
           throw profileError

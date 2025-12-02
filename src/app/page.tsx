@@ -1,12 +1,20 @@
 'use client'
 
 import { useAuth } from '@/context/AuthContext'
+import { useSpinner } from '@/context/SpinnerContext'
 import { AppLayout } from '@/layout/AppLayout/AppLayout'
+import { useEffect } from 'react'
 
 export default function Page() {
   const { user, loading } = useAuth()
-
-  if (loading) return <p>Loading...</p>
+  const { showSpinner, hideSpinner } = useSpinner()
+  useEffect(() => {
+    if (loading) {
+      showSpinner()
+    } else {
+      hideSpinner()
+    }
+  }, [loading])
 
   const displayName = user?.full_name ?? user?.email ?? 'User'
 

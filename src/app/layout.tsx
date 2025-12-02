@@ -4,6 +4,7 @@ import './globals.css'
 import { QueryProvider } from '@/providers/QueryProvider'
 import { AuthProvider } from '@/context/AuthContext'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { SpinnerProvider } from '@/context/SpinnerContext'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,7 +36,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider>
           <QueryProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              <SpinnerProvider>{children}</SpinnerProvider>
+            </AuthProvider>
           </QueryProvider>
         </ThemeProvider>
       </body>
