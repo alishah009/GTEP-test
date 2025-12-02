@@ -4,7 +4,7 @@
 # Check for empty files
 echo "🔍 Checking for empty files..."
 if git diff --cached --name-only | xargs -I{} sh -c "[ -f {} ] && [ ! -s {} ]" | grep .; then
-  echo "❌ Error: Empty files detected in commit. Please remove them."
+  echo "Error: Empty files detected in commit. Please remove them."
   exit 1
 fi
 
