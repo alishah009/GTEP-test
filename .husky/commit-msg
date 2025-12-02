@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
-. "${0%/*}/_/h"
+. "$(dirname -- "$0")/_/husky.sh"
 
-commit_message="$1"
-# exit with a non zero exit code incase of an invalid commit message
-
-# use git-conventional-commits, see https://github.com/qoomon/git-conventional-commits
-yarn git-conventional-commits commit-msg-hook "$commit_message"
+# Validate commit message format using commitlint
+npx --no -- commitlint --edit $1
