@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "type-check": "tsc --noEmit",
+    "validate": "yarn lint:fix && yarn type-check",
     "prepare": "husky install"
   },
   "lint-staged": {
