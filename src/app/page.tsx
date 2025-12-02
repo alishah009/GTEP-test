@@ -14,6 +14,7 @@ export default function Page() {
     } else {
       hideSpinner()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
   const displayName = user?.full_name ?? user?.email ?? 'User'
