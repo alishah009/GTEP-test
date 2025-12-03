@@ -1,0 +1,89 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "user": "User",
+    "guest": "guest"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome!",
+      "subtitle": "Please sign in to continue",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "submitButton": "Log In",
+      "signupLink": "New here?",
+      "createAccount": "Create an account"
+    },
+    "signup": {
+      "title": "Create an account",
+      "subtitle": "Please fill in the form to create an account",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submitButton": "Sign Up",
+      "loginLink": "Already have an account?",
+      "signIn": "Log In"
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "profile": "Profile",
+    "achievements": "Achievements",
+    "leaderboard": "Leader Board",
+    "notifications": "Notifications",
+    "resources": "Resources",
+    "trainingCourses": "Training Courses",
+    "searchPlaceholder": "Find courses, training, or resources",
+    "noSectionsAvailable": "No sections available for your role",
+    "logout": "Logout",
+    "toggleSidebar": "Toggle sidebar",
+    "closeSidebar": "Close sidebar overlay",
+    "toggleTheme": "Toggle theme"
+  },
+  "pages": {
+    "home": {
+      "welcomeBack": "Welcome back, {name}",
+      "dashboardDescription": "This is the main dashboard area. Drop your widgets or page content here."
+    },
+    "profile": {
+      "title": "Profile",
+      "editProfile": "Edit Profile",
+      "description": "This is the main Profile area. Drop your widgets or page content here."
+    },
+    "achievements": {
+      "title": "Achievements",
+      "description": "This is the main achievements area. Drop your widgets or page content here."
+    },
+    "leaderboard": {
+      "title": "Leader Board",
+      "description": "This is the main Leader Board area. Drop your widgets or page content here."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "This is the main Notifications area. Drop your widgets or page content here."
+    },
+    "resources": {
+      "title": "Resources",
+      "description": "This is the main Resources area. Drop your widgets or page content here."
+    },
+    "trainingCourses": {
+      "title": "Training Courses",
+      "description": "This is the main Training area. Drop your widgets or page content here."
+    }
+  },
+  "layout": {
+    "userAvatar": "User avatar",
+    "logo": "GTEP Logo"
+  }
+}
