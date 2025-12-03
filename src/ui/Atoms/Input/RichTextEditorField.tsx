@@ -6,6 +6,7 @@ import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
 import { Editor } from '@tinymce/tinymce-react'
 import { useEffect, useState } from 'react'
 import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
+import { env } from '@/config/env'
 
 export interface FormEditorProps<T> extends CustomInputProps, IResponsive {
   name: Path<T>
@@ -58,7 +59,7 @@ export const RichTextEditorField = <T extends FieldValues>({
           render={({ field: { onChange } }) => (
             <Editor
               value={methods.getValues().content}
-              apiKey={process.env.TINYMCE_APIKEY}
+              apiKey={env.tinymce.apiKey}
               init={{
                 menubar: false,
                 branding: false,
