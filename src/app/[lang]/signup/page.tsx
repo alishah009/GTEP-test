@@ -1,4 +1,5 @@
 'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSignup } from '@/hooks/mutation/useAuth'
@@ -8,8 +9,10 @@ import { message } from 'antd'
 import { Button } from '@/ui/Atoms/Button'
 import { User } from '@/entity/User'
 import { AuthLayout } from '@/layout/AuthLayout'
+import { useDictionary } from '@/hooks/i18n/useDictionary'
 
 export default function SignUpPage() {
+  const { dict, loading: dictLoading, locale } = useDictionary()
   const methods = useForm<User>({})
 
   const { handleSubmit } = methods
@@ -22,6 +25,10 @@ export default function SignUpPage() {
     } catch {
       // noImp
     }
+  }
+
+  if (!dict || dictLoading) {
+    return null
   }
 
   return (
@@ -40,27 +47,32 @@ export default function SignUpPage() {
         {contextHolder}
         <Image height={40} width={160} src='/gtep.png' className='self-start' alt='logo' />
         <div className='w-full text-left'>
-          <h1 className='mt-2 text-2xl font-semibold '>Create an account</h1>
-          <p className='text-lg text-gray-500'>Please fill in the form to create an account</p>
+          <h1 className='mt-2 text-2xl font-semibold '>{dict.auth.signup.title}</h1>
+          <p className='text-lg text-gray-500'>{dict.auth.signup.subtitle}</p>
         </div>
         <FormProvider {...methods}>
-          <InputField label='Full Name' name='full_name' required={true} />
-          <InputField label='Email' type='email' name='email' required={true} />
-          <InputField label='Password' type='password' name='password' required={true} />
+          <InputField label={dict.auth.signup.fullName} name='full_name' required={true} />
+          <InputField label={dict.auth.signup.email} type='email' name='email' required={true} />
+          <InputField
+            label={dict.auth.signup.password}
+            type='password'
+            name='password'
+            required={true}
+          />
           <Button
             buttonType='Primary'
-            className='!w-full'
+            className='w-full!'
             type='submit'
             disabled={isPending}
             loading={isPending}
           >
-            Sign Up
+            {dict.auth.signup.submitButton}
           </Button>
         </FormProvider>
         <p className='text-center mt-4 text-sm'>
-          Already have an account?{' '}
-          <Link href='/login' className='text-primary-600 hover:underline font-bold'>
-            Log In
+          {dict.auth.signup.loginLink}{' '}
+          <Link href={`/${locale}/login`} className='text-primary-600 hover:underline font-bold'>
+            {dict.auth.signup.signIn}
           </Link>
         </p>
       </form>

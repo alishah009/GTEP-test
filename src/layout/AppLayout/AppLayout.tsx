@@ -5,10 +5,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRightOutlined, CloseOutlined } from '@ant-design/icons'
 import { usePathname } from 'next/navigation'
-import { NAV_ITEMS, filterNavItemsByRole } from '@/config/accessControl'
+import { NAV_ITEMS, filterNavItemsByRole, type NavItem } from '@/config/accessControl'
 import { AppNavbar } from './AppNavbar'
 import { useAuth } from '@/context/AuthContext'
 import { useSpinner } from '@/context/SpinnerContext'
+import { useLocale } from '@/hooks/i18n/useLocale'
+import { useDictionary } from '@/hooks/i18n/useDictionary'
 
 type AppLayoutProps = {
   children: ReactNode
@@ -17,14 +19,53 @@ type AppLayoutProps = {
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const { user, loading, logout } = useAuth()
   const { showSpinner, hideSpinner } = useSpinner()
+  const locale = useLocale()
+  const { dict, loading: dictLoading } = useDictionary()
 
   const [isDesktop, setIsDesktop] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [allowSidebarAnimation, setAllowSidebarAnimation] = useState(false)
   const pathname = usePathname()
+
+  // Strip locale from pathname for comparison (e.g., /en-US/profile -> /profile)
+  const pathnameWithoutLocale = useMemo(() => {
+    const localePrefix = `/${locale}`
+    if (pathname.startsWith(localePrefix)) {
+      const path = pathname.slice(localePrefix.length) || '/'
+      return path
+    }
+    return pathname
+  }, [pathname, locale])
+
+  // Map navigation items to translated labels
+  const translatedNavItems = useMemo(() => {
+    if (!dict) return NAV_ITEMS
+
+    const translateNavItem = (item: NavItem): NavItem => {
+      const labelMap: Record<string, string> = {
+        Home: dict.navigation.home,
+        Achievements: dict.navigation.achievements,
+        'Training Courses': dict.navigation.trainingCourses,
+        'Leader Board': dict.navigation.leaderboard,
+        Notifications: dict.navigation.notifications,
+        Resources: dict.navigation.resources,
+        Profile: dict.navigation.profile
+      }
+
+      return {
+        ...item,
+        // Use dictionary value, fallback to original label only if not found in map
+        label: labelMap[item.label] ?? item.label,
+        children: item.children?.map(translateNavItem)
+      }
+    }
+
+    return NAV_ITEMS.map(translateNavItem)
+  }, [dict])
+
   const visibleNavItems = useMemo(
-    () => filterNavItemsByRole(NAV_ITEMS, user?.role ?? null),
-    [user?.role]
+    () => filterNavItemsByRole(translatedNavItems, user?.role ?? null),
+    [translatedNavItems, user?.role]
   )
 
   useEffect(() => {
@@ -67,6 +108,11 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     }
   }, [hideSpinner, loading, showSpinner])
 
+  // Don't render until dictionary is loaded
+  if (!dict || dictLoading) {
+    return null
+  }
+
   return (
     <div className='flex h-screen overflow-hidden bg-gray-50 text-gray-900'>
       <button
@@ -77,7 +123,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
           isSidebarOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={closeSidebar}
-        aria-label='Close sidebar overlay'
+        aria-label={dict.navigation.closeSidebar}
       />
 
       <aside
@@ -90,7 +136,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             {user?.photo_url ? (
               <Image
                 src={user.photo_url}
-                alt='User avatar'
+                alt={dict.layout.userAvatar}
                 width={48}
                 height={48}
                 className='h-12 w-12 rounded-full object-cover'
@@ -101,14 +147,17 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
               </div>
             )}
             <div>
-              <p className='text-base font-semibold text-gray-900'>{user?.full_name ?? 'User'}</p>
-              <p className='text-sm text-gray-400'>{user?.role ?? 'guest'}@gtep.com</p>
+              <p className='text-base font-semibold text-gray-900'>
+                {user?.full_name ?? dict.common.user}
+              </p>
+              <p className='text-sm text-gray-400'>{user?.role ?? dict.common.guest}@gtep.com</p>
             </div>
           </div>
           <button
             type='button'
             className='rounded-md p-1 text-gray-500 hover:bg-gray-100 lg:hidden'
             onClick={toggleSidebar}
+            aria-label={dict.navigation.closeSidebar}
           >
             <CloseOutlined />
           </button>
@@ -117,11 +166,12 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
         <nav className='flex-1 overflow-y-auto px-4 py-6'>
           <ul className='space-y-1'>
             {visibleNavItems.map((item) => {
-              const isActive = pathname === item.href
+              const isActive = pathnameWithoutLocale === item.href
+              const hrefWithLocale = `/${locale}${item.href === '/' ? '' : item.href}`
               return (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    href={hrefWithLocale}
                     className={`flex items-center justify-between rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                       isActive
                         ? 'bg-primary-50 text-primary-600'
@@ -141,11 +191,12 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
                   {item.children && item.children.length > 0 ? (
                     <ul className='mt-1 space-y-1 pl-4'>
                       {item.children.map((child) => {
-                        const isChildActive = pathname === child.href
+                        const isChildActive = pathnameWithoutLocale === child.href
+                        const childHrefWithLocale = `/${locale}${child.href}`
                         return (
                           <li key={child.href}>
                             <Link
-                              href={child.href}
+                              href={childHrefWithLocale}
                               className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                                 isChildActive
                                   ? 'bg-primary-50 text-primary-600'
@@ -167,7 +218,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             })}
             {visibleNavItems.length === 0 ? (
               <li className='rounded-lg bg-gray-50 px-4 py-3 text-xs text-gray-500'>
-                No sections available for your role
+                {dict.navigation.noSectionsAvailable}
               </li>
             ) : null}
           </ul>
@@ -188,7 +239,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
               <span className='flex h-8 w-8 items-center justify-center rounded-full bg-[#FFE3DF]'>
                 <ArrowRightOutlined />
               </span>
-              Logout
+              {dict.navigation.logout}
             </button>
           ) : null}
         </div>
