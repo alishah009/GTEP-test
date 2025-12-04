@@ -1,7 +1,7 @@
 // Server Component - loads dictionary on server
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import type { Locale } from '@/config/i18n'
-import { HomePageClient } from '@/ui/components/home/HomePage'
+import { HomePageClient } from '@/ui/components/home'
 
 type PageProps = {
   params: Promise<{ lang: Locale }>

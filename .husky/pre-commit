@@ -9,5 +9,6 @@ if git diff --cached --name-only | xargs -I{} sh -c "[ -f {} ] && [ ! -s {} ]" |
 fi
 
 yarn validate
+yarn test
 yarn prettier --write .
 # empty files , tests
