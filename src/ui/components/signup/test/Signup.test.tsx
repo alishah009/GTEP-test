@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Login } from '@/ui/components/login'
+import { Signup } from '@/ui/components/signup'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { useDictionary } from '@/hooks/i18n/useDictionary'
-import { useLogin } from '@/hooks/mutation/useAuth'
+import { useSignup } from '@/hooks/mutation/useAuth'
 
 // Mock useDictionary hook
 jest.mock('@/hooks/i18n/useDictionary')
 
-// Mock useLogin hook
+// Mock useSignup hook
 const mutateAsyncMock = jest.fn()
 jest.mock('@/hooks/mutation/useAuth', () => ({
-  useLogin: jest.fn()
+  useSignup: jest.fn()
 }))
 
 // Mock Next.js components
@@ -36,7 +36,7 @@ jest.mock('@/ui/Atoms/Button', () => ({
 
 // Mock InputField - simplified version that works with react-hook-form
 jest.mock('@/ui/Atoms/Input/InputField', () => ({
-  InputField: ({ label, name, type, required }: any) => (
+  InputField: ({ label, name, type = 'text', required }: any) => (
     <div>
       <label htmlFor={name}>{label}</label>
       <input id={name} name={name} type={type} required={required} data-testid={`input-${name}`} />
@@ -55,15 +55,15 @@ jest.mock('antd', () => ({
 const mockDictionary = {
   dict: {
     auth: {
-      login: {
-        title: 'Login',
-        subtitle: 'Welcome back!',
+      signup: {
+        title: 'Create an account',
+        subtitle: 'Please fill in the form to create an account',
+        fullName: 'Full Name',
         email: 'Email',
         password: 'Password',
-        forgotPassword: 'Forgot password?',
-        submitButton: 'Login',
-        signupLink: "Don't have an account?",
-        createAccount: 'Sign up'
+        submitButton: 'Sign Up',
+        loginLink: 'Already have an account?',
+        signIn: 'Log In'
       }
     }
   },
@@ -71,42 +71,36 @@ const mockDictionary = {
   locale: 'en'
 }
 
-describe('Login Component', () => {
+describe('Signup Component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mutateAsyncMock.mockResolvedValue({})
     ;(useDictionary as jest.Mock).mockReturnValue(mockDictionary)
-    ;(useLogin as jest.Mock).mockReturnValue({
+    ;(useSignup as jest.Mock).mockReturnValue({
       mutateAsync: mutateAsyncMock,
       isPending: false
     })
   })
 
   describe('Rendering', () => {
-    it('renders all login page elements correctly', () => {
-      render(<Login />)
+    it('renders all signup page elements correctly', () => {
+      render(<Signup />)
 
-      expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument()
-      expect(screen.getByText('Welcome back!')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Create an account' })).toBeInTheDocument()
+      expect(screen.getByText('Please fill in the form to create an account')).toBeInTheDocument()
+      expect(screen.getByLabelText('Full Name')).toBeInTheDocument()
       expect(screen.getByLabelText('Email')).toBeInTheDocument()
       expect(screen.getByLabelText('Password')).toBeInTheDocument()
-      expect(screen.getByText('Forgot password?')).toBeInTheDocument()
-      expect(screen.getByText("Don't have an account?")).toBeInTheDocument()
-      expect(screen.getByText('Sign up')).toBeInTheDocument()
+      expect(screen.getByText('Already have an account?')).toBeInTheDocument()
+      expect(screen.getByText('Log In')).toBeInTheDocument()
       expect(screen.getByAltText('logo')).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Sign Up' })).toBeInTheDocument()
     })
 
-    it('renders forgot password link with correct href', () => {
-      render(<Login />)
-      const forgotPasswordLink = screen.getByText('Forgot password?').closest('a')
-      expect(forgotPasswordLink).toHaveAttribute('href', '/en/forgot-password')
-    })
-
-    it('renders signup link with correct href', () => {
-      render(<Login />)
-      const signupLink = screen.getByText('Sign up').closest('a')
-      expect(signupLink).toHaveAttribute('href', '/en/signup')
+    it('renders login link with correct href', () => {
+      render(<Signup />)
+      const loginLink = screen.getByText('Log In').closest('a')
+      expect(loginLink).toHaveAttribute('href', '/en/login')
     })
 
     it('returns null when dictionary is loading', () => {
@@ -116,7 +110,7 @@ describe('Login Component', () => {
         loading: true
       })
 
-      const { container } = render(<Login />)
+      const { container } = render(<Signup />)
       expect(container.firstChild).toBeNull()
     })
 
@@ -127,19 +121,21 @@ describe('Login Component', () => {
         loading: false
       })
 
-      const { container } = render(<Login />)
+      const { container } = render(<Signup />)
       expect(container.firstChild).toBeNull()
     })
   })
 
   describe('Form Submission', () => {
-    it('submits the form with valid email and password', async () => {
-      render(<Login />)
+    it('submits the form with valid full name, email and password', async () => {
+      render(<Signup />)
 
+      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement
       const emailInput = screen.getByLabelText('Email') as HTMLInputElement
       const passwordInput = screen.getByLabelText('Password') as HTMLInputElement
-      const submitButton = screen.getByRole('button', { name: 'Login' })
+      const submitButton = screen.getByRole('button', { name: 'Sign Up' })
 
+      fireEvent.change(fullNameInput, { target: { value: 'John Doe' } })
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
       fireEvent.change(passwordInput, { target: { value: 'password123' } })
       fireEvent.click(submitButton)
@@ -152,12 +148,30 @@ describe('Login Component', () => {
       // but we verify that the mutation was called, indicating form submission
     })
 
-    it('does not submit form when email is empty', async () => {
-      render(<Login />)
+    it('does not submit form when full name is empty', async () => {
+      render(<Signup />)
 
+      const emailInput = screen.getByLabelText('Email') as HTMLInputElement
       const passwordInput = screen.getByLabelText('Password') as HTMLInputElement
-      const submitButton = screen.getByRole('button', { name: 'Login' })
+      const submitButton = screen.getByRole('button', { name: 'Sign Up' })
 
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+      fireEvent.change(passwordInput, { target: { value: 'password123' } })
+      fireEvent.click(submitButton)
+
+      await waitFor(() => {
+        expect(mutateAsyncMock).not.toHaveBeenCalled()
+      })
+    })
+
+    it('does not submit form when email is empty', async () => {
+      render(<Signup />)
+
+      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement
+      const passwordInput = screen.getByLabelText('Password') as HTMLInputElement
+      const submitButton = screen.getByRole('button', { name: 'Sign Up' })
+
+      fireEvent.change(fullNameInput, { target: { value: 'John Doe' } })
       fireEvent.change(passwordInput, { target: { value: 'password123' } })
       fireEvent.click(submitButton)
 
@@ -167,11 +181,13 @@ describe('Login Component', () => {
     })
 
     it('does not submit form when password is empty', async () => {
-      render(<Login />)
+      render(<Signup />)
 
+      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement
       const emailInput = screen.getByLabelText('Email') as HTMLInputElement
-      const submitButton = screen.getByRole('button', { name: 'Login' })
+      const submitButton = screen.getByRole('button', { name: 'Sign Up' })
 
+      fireEvent.change(fullNameInput, { target: { value: 'John Doe' } })
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
       fireEvent.click(submitButton)
 
@@ -181,18 +197,20 @@ describe('Login Component', () => {
     })
 
     it('handles form submission error gracefully', async () => {
-      const errorMock = jest.fn().mockRejectedValue(new Error('Login failed'))
-      ;(useLogin as jest.Mock).mockReturnValue({
+      const errorMock = jest.fn().mockRejectedValue(new Error('Signup failed'))
+      ;(useSignup as jest.Mock).mockReturnValue({
         mutateAsync: errorMock,
         isPending: false
       })
 
-      render(<Login />)
+      render(<Signup />)
 
+      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement
       const emailInput = screen.getByLabelText('Email') as HTMLInputElement
       const passwordInput = screen.getByLabelText('Password') as HTMLInputElement
-      const submitButton = screen.getByRole('button', { name: 'Login' })
+      const submitButton = screen.getByRole('button', { name: 'Sign Up' })
 
+      fireEvent.change(fullNameInput, { target: { value: 'John Doe' } })
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
       fireEvent.change(passwordInput, { target: { value: 'password123' } })
       fireEvent.click(submitButton)
@@ -205,31 +223,39 @@ describe('Login Component', () => {
 
   describe('Loading State', () => {
     it('disables submit button when isPending is true', () => {
-      ;(useLogin as jest.Mock).mockReturnValue({
+      ;(useSignup as jest.Mock).mockReturnValue({
         mutateAsync: mutateAsyncMock,
         isPending: true
       })
 
-      render(<Login />)
+      render(<Signup />)
       const submitButton = screen.getByRole('button', { name: 'Loading...' })
       expect(submitButton).toBeDisabled()
     })
 
     it('enables submit button when isPending is false', () => {
-      ;(useLogin as jest.Mock).mockReturnValue({
+      ;(useSignup as jest.Mock).mockReturnValue({
         mutateAsync: mutateAsyncMock,
         isPending: false
       })
 
-      render(<Login />)
-      const submitButton = screen.getByRole('button', { name: 'Login' })
+      render(<Signup />)
+      const submitButton = screen.getByRole('button', { name: 'Sign Up' })
       expect(submitButton).not.toBeDisabled()
     })
   })
 
   describe('Input Fields', () => {
+    it('allows typing in full name input', () => {
+      render(<Signup />)
+      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement
+
+      fireEvent.change(fullNameInput, { target: { value: 'Jane Smith' } })
+      expect(fullNameInput.value).toBe('Jane Smith')
+    })
+
     it('allows typing in email input', () => {
-      render(<Login />)
+      render(<Signup />)
       const emailInput = screen.getByLabelText('Email') as HTMLInputElement
 
       fireEvent.change(emailInput, { target: { value: 'user@example.com' } })
@@ -237,7 +263,7 @@ describe('Login Component', () => {
     })
 
     it('allows typing in password input', () => {
-      render(<Login />)
+      render(<Signup />)
       const passwordInput = screen.getByLabelText('Password') as HTMLInputElement
 
       fireEvent.change(passwordInput, { target: { value: 'secret123' } })
@@ -245,15 +271,22 @@ describe('Login Component', () => {
     })
 
     it('password input has type password', () => {
-      render(<Login />)
+      render(<Signup />)
       const passwordInput = screen.getByLabelText('Password')
       expect(passwordInput).toHaveAttribute('type', 'password')
     })
 
     it('email input has type email', () => {
-      render(<Login />)
+      render(<Signup />)
       const emailInput = screen.getByLabelText('Email')
       expect(emailInput).toHaveAttribute('type', 'email')
     })
+
+    it('full name input has type text', () => {
+      render(<Signup />)
+      const fullNameInput = screen.getByLabelText('Full Name')
+      expect(fullNameInput).toHaveAttribute('type', 'text')
+    })
   })
 })
+
