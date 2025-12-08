@@ -15,7 +15,8 @@ const requiredEnvVars = {
 
 const optionalEnvVars = {
   TINYMCE_APIKEY: process.env.TINYMCE_APIKEY,
-  APP_ENV: process.env.APP_ENV // Custom env: 'local' | 'staging' | 'production'
+  APP_ENV: process.env.APP_ENV, // Custom env: 'local' | 'staging' | 'production'
+  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY
 } as const
 
 // Validate required environment variables
@@ -45,7 +46,8 @@ export const env = {
   // Supabase
   supabase: {
     url: requiredEnvVars.NEXT_PUBLIC_SUPABASE_URL!,
-    anonKey: requiredEnvVars.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    anonKey: requiredEnvVars.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    serviceRoleKey: optionalEnvVars.SUPABASE_SERVICE_ROLE_KEY
   },
 
   // TinyMCE

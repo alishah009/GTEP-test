@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LanguageSwitcher } from '@/ui/components/LanguageSwitcher'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { useLocale } from '@/hooks/i18n/useLocale'
@@ -332,4 +331,3 @@ describe('LanguageSwitcher Component', () => {
     })
   })
 })
-

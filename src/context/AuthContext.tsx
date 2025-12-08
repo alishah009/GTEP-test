@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser({ ...userData, email: session.user.email ?? null } as User)
         setLoading(false)
       })
-    } else if (!session) {
+    } else {
       queueMicrotask(() => {
         setUser(null)
         setLoading(false)
