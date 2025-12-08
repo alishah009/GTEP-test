@@ -10,7 +10,6 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock RadioButton component
 jest.mock('@/ui/Atoms/Input/RadioButton/RadioButton', () => ({
-   
   RadioButton: ({
     label,
     error,

@@ -10,7 +10,6 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock Select component - it receives field props from react-hook-form
 jest.mock('@/ui/Atoms/Input/Select/Select', () => ({
-   
   Select: ({
     label,
     error,
