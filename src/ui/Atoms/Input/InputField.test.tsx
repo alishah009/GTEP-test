@@ -10,14 +10,9 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock Input component
 jest.mock('@/ui/Atoms/Input/Input', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Input: ({ label, error, disabled, fieldType, type, classNames: _classNames, ...field }: any) => {
+  Input: ({ label, error, disabled, fieldType, type, ...field }: any) => {
     // Extract react-hook-form field props
     const { onChange, onBlur, value = '', name, ref, ...inputProps } = field
-
-    // Filter out non-DOM props to avoid React warnings
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { classNames: _unused, ...domProps } = inputProps
 
     // Determine input type based on fieldType (matching Input.tsx logic)
     let inputType = type || 'text'

@@ -11,6 +11,7 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 // Mock MultiCheckBox component
 jest.mock('@/ui/Atoms/Input/MultiCheckBox/MultiCheckBox', () => ({
   MultiCheckBox: ({ label, error, constant, disabled, field }: any) => {
+    // restProps removed since it's unused
     const { onChange, onBlur, value = [], name, ref, ...fieldProps } = field || {}
     const fieldName = name || 'unknown'
 

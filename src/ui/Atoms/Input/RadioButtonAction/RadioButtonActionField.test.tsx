@@ -277,6 +277,7 @@ describe('RadioButtonActionField Component', () => {
 
       await waitFor(() => {
         // Error should be displayed when validation fails
+        // const errorElement = screen.queryByTestId('error-testField')
         // Note: The error might not appear immediately due to validation timing
         expect(button).toBeInTheDocument()
       })

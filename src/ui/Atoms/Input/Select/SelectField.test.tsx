@@ -31,18 +31,6 @@ jest.mock('@/ui/Atoms/Input/Select/Select', () => ({
     const { onChange, onBlur, value = '', name, ref, ...fieldProps } = restProps
     const fieldName = name || 'unknown'
 
-    // Filter out non-DOM props to avoid React warnings
-    /* eslint-disable @typescript-eslint/no-unused-vars */
-    const {
-      showSearch: _unused1,
-      classNames: _unused2,
-      prefixComponent: _unused3,
-      selectSize: _unused4,
-      filterOption: _unused5,
-      ...domProps
-    } = fieldProps
-    /* eslint-enable @typescript-eslint/no-unused-vars */
-
     return (
       <div>
         {label && <label htmlFor={fieldName}>{label}</label>}

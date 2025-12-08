@@ -55,18 +55,25 @@ export const TextAreaField = <T extends FieldValues>({
         rules={{
           required: !required ? false : `${label || 'This'} is required!`
         }}
-        render={({ field }) => (
-          <TextArea
-            {...field}
-            {...rest}
-            disabled={disabled}
-            label={label}
-            required={required}
-            classNames={restClasses}
-            rows={rows}
-            error={getError()}
-          />
-        )}
+        render={({ field }) => {
+          // Extract field props - exclude 'name' as it's not needed by Ant Design TextArea
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { name: _fieldName, ...fieldProps } = field
+
+          return (
+            <TextArea
+              {...rest}
+              {...fieldProps}
+              name={name}
+              disabled={disabled}
+              label={label}
+              required={required}
+              classNames={restClasses}
+              rows={rows}
+              error={getError()}
+            />
+          )
+        }}
       ></Controller>
     </Responsive>
   )
