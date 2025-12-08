@@ -1,0 +1,89 @@
+{
+  "common": {
+    "welcome": "Bienvenido",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "user": "Usuario",
+    "guest": "invitado"
+  },
+  "auth": {
+    "login": {
+      "title": "¡Bienvenido!",
+      "subtitle": "Por favor inicia sesión para continuar",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submitButton": "Iniciar sesión",
+      "signupLink": "¿Nuevo aquí?",
+      "createAccount": "Crear una cuenta"
+    },
+    "signup": {
+      "title": "Crear una cuenta",
+      "subtitle": "Por favor completa el formulario para crear una cuenta",
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "submitButton": "Registrarse",
+      "loginLink": "¿Ya tienes una cuenta?",
+      "signIn": "Iniciar sesión"
+    }
+  },
+  "navigation": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "achievements": "Logros",
+    "leaderboard": "Tabla de líderes",
+    "notifications": "Notificaciones",
+    "resources": "Recursos",
+    "trainingCourses": "Cursos de formación",
+    "searchPlaceholder": "Buscar cursos, formación o recursos",
+    "noSectionsAvailable": "No hay secciones disponibles para tu rol",
+    "logout": "Cerrar sesión",
+    "toggleSidebar": "Alternar barra lateral",
+    "closeSidebar": "Cerrar superposición de barra lateral",
+    "toggleTheme": "Alternar tema"
+  },
+  "pages": {
+    "home": {
+      "welcomeBack": "Bienvenido de nuevo, {name}",
+      "dashboardDescription": "Esta es el área principal del panel. Coloca tus widgets o contenido de página aquí."
+    },
+    "profile": {
+      "title": "Perfil",
+      "editProfile": "Editar perfil",
+      "description": "Esta es el área principal del Perfil. Coloca tus widgets o contenido de página aquí."
+    },
+    "achievements": {
+      "title": "Logros",
+      "description": "Esta es el área principal de logros. Coloca tus widgets o contenido de página aquí."
+    },
+    "leaderboard": {
+      "title": "Tabla de líderes",
+      "description": "Esta es el área principal de la Tabla de líderes. Coloca tus widgets o contenido de página aquí."
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "description": "Esta es el área principal de Notificaciones. Coloca tus widgets o contenido de página aquí."
+    },
+    "resources": {
+      "title": "Recursos",
+      "description": "Esta es el área principal de Recursos. Coloca tus widgets o contenido de página aquí."
+    },
+    "trainingCourses": {
+      "title": "Cursos de formación",
+      "description": "Esta es el área principal de Formación. Coloca tus widgets o contenido de página aquí."
+    }
+  },
+  "layout": {
+    "userAvatar": "Avatar del usuario",
+    "logo": "Logo GTEP"
+  }
+}

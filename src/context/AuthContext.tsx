@@ -1,9 +1,10 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { Session } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/supabaseBrowser'
+import { useTheme } from '@/context/ThemeContext'
 import { useUser } from '@/hooks/useUser'
 import { User } from '@/entity/User'
 
@@ -26,15 +27,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const { resetTheme } = useTheme()
 
   const { data: userData, isLoading: userLoading } = useUser(session?.user?.id ?? null)
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
+    if (typeof document !== 'undefined') {
+      document.cookie.split(';').forEach((cookie) => {
+        const [name] = cookie.split('=')
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`
+      })
+    }
+    if (typeof window !== 'undefined') {
+      window.localStorage.clear()
+      window.sessionStorage.clear()
+    }
     await supabase.auth.signOut()
     setUser(null)
     setSession(null)
+    resetTheme()
     router.push('/login')
-  }
+  }, [resetTheme, router])
 
   // Load session on mount
   useEffect(() => {
@@ -55,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     })
 
     return () => listener.subscription.unsubscribe()
-  }, [])
+  }, [logout])
 
   // Set user only after session & userData are ready
   useEffect(() => {
@@ -65,7 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser({ ...userData, email: session.user.email ?? null } as User)
         setLoading(false)
       })
-    } else if (!session) {
+    } else {
       queueMicrotask(() => {
         setUser(null)
         setLoading(false)
