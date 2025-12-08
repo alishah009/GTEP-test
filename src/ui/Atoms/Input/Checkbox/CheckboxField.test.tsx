@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { CheckboxField } from '@/ui/Atoms/Input/Checkbox'
 
@@ -11,13 +11,25 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 // Mock InputField component (since CheckboxField uses InputField internally)
 // CheckboxField wraps InputField and passes a custom onChange that uses resetField
 jest.mock('@/ui/Atoms/Input/InputField', () => {
-  let checkboxValues: Record<string, any> = {}
-  
+  const checkboxValues: Record<string, any> = {}
+
   return {
-    InputField: ({ label, error, disabled, name, type, onChange: customOnChange, ...field }: any) => {
+    InputField: ({
+      label,
+      error,
+      disabled,
+      name,
+      type,
+      onChange: customOnChange,
+      ...field
+    }: any) => {
       const { onChange: fieldOnChange, onBlur, value, ref, ...fieldProps } = field
       const fieldName = name || 'unknown'
       const isCheckbox = type === 'Checkbox'
+
+      // Filter out non-DOM props to avoid React warnings
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { classNames: _unused, ...domProps } = fieldProps
 
       if (isCheckbox) {
         // For checkboxes, use value from field or track it locally
@@ -27,7 +39,7 @@ jest.mock('@/ui/Atoms/Input/InputField', () => {
         const handleChange = (e: any) => {
           const newChecked = e.target?.checked ?? !checked
           checkboxValues[fieldName] = newChecked
-          
+
           // CheckboxField passes a custom onChange that uses resetField
           if (customOnChange) {
             customOnChange(e)
@@ -51,7 +63,7 @@ jest.mock('@/ui/Atoms/Input/InputField', () => {
                 disabled={disabled}
                 data-testid={`checkbox-${fieldName}`}
                 aria-invalid={!!error}
-                {...fieldProps}
+                {...domProps}
               />
               {label}
             </label>
@@ -74,7 +86,7 @@ jest.mock('@/ui/Atoms/Input/InputField', () => {
             disabled={disabled}
             data-testid={`input-${fieldName}`}
             aria-invalid={!!error}
-            {...fieldProps}
+            {...domProps}
           />
           {error && <span data-testid={`error-${fieldName}`}>{error}</span>}
         </div>
@@ -199,7 +211,7 @@ describe('CheckboxField Component', () => {
 
       const checkbox = screen.getByTestId('checkbox-testField') as HTMLInputElement
       expect(checkbox).toBeInTheDocument()
-      
+
       // Checkbox change is handled by CheckboxField's custom onChange
       fireEvent.change(checkbox, { target: { checked: true, value: 'test' } })
       expect(checkbox).toBeInTheDocument()
@@ -305,7 +317,7 @@ describe('CheckboxField Component', () => {
 
       const checkbox = screen.getByTestId('checkbox-testField')
       expect(checkbox).toBeInTheDocument()
-      
+
       const submitButton = screen.getByText('Submit')
       expect(submitButton).toBeInTheDocument()
     })
@@ -372,4 +384,3 @@ describe('CheckboxField Component', () => {
     })
   })
 })
-

@@ -10,10 +10,15 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock TextArea component
 jest.mock('@/ui/Atoms/Input/TextArea/TextArea', () => ({
-  TextArea: ({ label, error, rows, disabled, ...restProps }: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  TextArea: ({ label, error, rows, disabled, classNames: _classNames, ...restProps }: any) => {
     // Extract field props that Controller passes
     const { onChange, onBlur, value = '', name, ref, ...fieldProps } = restProps
     const fieldName = name || 'unknown'
+
+    // Filter out non-DOM props to avoid React warnings
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { classNames: _unused, ...domProps } = fieldProps
 
     return (
       <div>
@@ -29,7 +34,7 @@ jest.mock('@/ui/Atoms/Input/TextArea/TextArea', () => ({
           rows={rows || 4}
           data-testid={`textarea-${fieldName}`}
           aria-invalid={!!error}
-          {...fieldProps}
+          {...domProps}
         />
         {error && <span data-testid={`error-${fieldName}`}>{error}</span>}
       </div>
@@ -209,12 +214,7 @@ describe('TextAreaField Component', () => {
     it('displays error message when error prop is provided', () => {
       render(
         <FormWrapper>
-          <TextAreaField
-            name='testField'
-            label='Test'
-            rows={4}
-            error='This field has an error'
-          />
+          <TextAreaField name='testField' label='Test' rows={4} error='This field has an error' />
         </FormWrapper>
       )
 
@@ -344,12 +344,7 @@ describe('TextAreaField Component', () => {
     it('applies custom className', () => {
       render(
         <FormWrapper>
-          <TextAreaField
-            name='testField'
-            label='Test'
-            rows={4}
-            className='custom-textarea-class'
-          />
+          <TextAreaField name='testField' label='Test' rows={4} className='custom-textarea-class' />
         </FormWrapper>
       )
 
@@ -396,4 +391,3 @@ describe('TextAreaField Component', () => {
     })
   })
 })
-

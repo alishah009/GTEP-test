@@ -39,6 +39,7 @@ jest.mock('@/ui/Atoms/Input/RadioButton/RadioButtonField', () => ({
             const isChecked = currentValue === item.key
             return (
               <label key={index} htmlFor={`${fieldName}-${index}`}>
+                {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
                 <input
                   id={`${fieldName}-${index}`}
                   name={fieldName}
@@ -52,7 +53,9 @@ jest.mock('@/ui/Atoms/Input/RadioButton/RadioButtonField', () => ({
                   data-testid={`radio-${fieldName}-${index}`}
                   aria-invalid={!!error ? 'true' : 'false'}
                   aria-checked={isChecked ? 'true' : 'false'}
-                  {...fieldProps}
+                  {...Object.fromEntries(
+                    Object.entries(fieldProps).filter(([key]) => key !== 'defaultChecked')
+                  )}
                 />
                 {item.value}
               </label>
@@ -150,11 +153,7 @@ describe('RadioButtonActionField Component', () => {
     it('enables radio buttons when disabled prop is false', () => {
       render(
         <FormWrapper>
-          <RadioButtonActionField
-            name='testField'
-            label='Enabled Field'
-            disabled={false}
-          />
+          <RadioButtonActionField name='testField' label='Enabled Field' disabled={false} />
         </FormWrapper>
       )
 
@@ -245,11 +244,7 @@ describe('RadioButtonActionField Component', () => {
     it('displays error message when error prop is provided', () => {
       render(
         <FormWrapper>
-          <RadioButtonActionField
-            name='testField'
-            label='Test'
-            error='This field has an error'
-          />
+          <RadioButtonActionField name='testField' label='Test' error='This field has an error' />
         </FormWrapper>
       )
 
@@ -282,7 +277,6 @@ describe('RadioButtonActionField Component', () => {
 
       await waitFor(() => {
         // Error should be displayed when validation fails
-        const errorElement = screen.queryByTestId('error-testField')
         // Note: The error might not appear immediately due to validation timing
         expect(button).toBeInTheDocument()
       })
@@ -368,9 +362,7 @@ describe('RadioButtonActionField Component', () => {
         const methods = useForm()
         return (
           <FormProvider {...methods}>
-            {showField && (
-              <RadioButtonActionField name='testField' label='Test' />
-            )}
+            {showField && <RadioButtonActionField name='testField' label='Test' />}
           </FormProvider>
         )
       }
@@ -482,4 +474,3 @@ describe('RadioButtonActionField Component', () => {
     })
   })
 })
-

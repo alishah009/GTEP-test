@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react'
 import { Grid } from '@/ui/Atoms/Grid/Grid'
 
@@ -237,4 +238,3 @@ describe('Grid Component', () => {
     })
   })
 })
-

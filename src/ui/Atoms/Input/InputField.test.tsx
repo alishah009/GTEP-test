@@ -10,10 +10,15 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock Input component
 jest.mock('@/ui/Atoms/Input/Input', () => ({
-  Input: ({ label, error, disabled, classNames, fieldType, type, ...field }: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  Input: ({ label, error, disabled, fieldType, type, classNames: _classNames, ...field }: any) => {
     // Extract react-hook-form field props
     const { onChange, onBlur, value = '', name, ref, ...inputProps } = field
-    
+
+    // Filter out non-DOM props to avoid React warnings
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { classNames: _unused, ...domProps } = inputProps
+
     // Determine input type based on fieldType (matching Input.tsx logic)
     let inputType = type || 'text'
     if (fieldType === 'Numeric' || fieldType === 'Float') {
@@ -21,7 +26,7 @@ jest.mock('@/ui/Atoms/Input/Input', () => ({
     } else if (fieldType === 'AlphaNumeric') {
       inputType = 'text'
     }
-    
+
     return (
       <div>
         {label && <label htmlFor={name}>{label}</label>}
@@ -36,7 +41,7 @@ jest.mock('@/ui/Atoms/Input/Input', () => ({
           disabled={disabled}
           data-testid={`input-${name}`}
           aria-invalid={!!error}
-          {...inputProps}
+          {...domProps}
         />
         {error && <span data-testid={`error-${name}`}>{error}</span>}
       </div>
@@ -54,7 +59,7 @@ jest.mock('@/ui/Atoms/Input/utils/getNestedError', () => ({
 
 // Test wrapper component
 const FormWrapper = ({ children, defaultValues = {} }: any) => {
-  const methods = useForm({ 
+  const methods = useForm({
     defaultValues,
     mode: 'onChange'
   })
@@ -428,4 +433,3 @@ describe('InputField Component', () => {
     })
   })
 })
-

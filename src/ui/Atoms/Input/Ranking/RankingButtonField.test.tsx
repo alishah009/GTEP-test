@@ -10,15 +10,7 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock RankingButton component
 jest.mock('@/ui/Atoms/Input/Ranking/RankingButton', () => ({
-  RankingButton: ({
-    label,
-    error,
-    disabled,
-    value,
-    onChange,
-    name,
-    ...restProps
-  }: any) => {
+  RankingButton: ({ label, error, disabled, value, onChange, name }: any) => {
     const fieldName = name || 'unknown'
 
     return (
@@ -33,6 +25,7 @@ jest.mock('@/ui/Atoms/Input/Ranking/RankingButton', () => ({
           />
           <div role='radiogroup' aria-label='Rating'>
             {[1, 2, 3, 4, 5].map((star) => (
+              /* eslint-disable-next-line jsx-a11y/role-supports-aria-props */
               <button
                 key={star}
                 type='button'
@@ -238,11 +231,7 @@ describe('RankingButtonField Component', () => {
     it('displays error message when error prop is provided', () => {
       render(
         <FormWrapper>
-          <RankingButtonField
-            name='testField'
-            label='Test'
-            error='This field has an error'
-          />
+          <RankingButtonField name='testField' label='Test' error='This field has an error' />
         </FormWrapper>
       )
 
@@ -380,11 +369,7 @@ describe('RankingButtonField Component', () => {
     it('applies custom className', () => {
       render(
         <FormWrapper>
-          <RankingButtonField
-            name='testField'
-            label='Test'
-            className='custom-ranking-class'
-          />
+          <RankingButtonField name='testField' label='Test' className='custom-ranking-class' />
         </FormWrapper>
       )
 
@@ -399,9 +384,7 @@ describe('RankingButtonField Component', () => {
         const methods = useForm()
         return (
           <FormProvider {...methods}>
-            {showField && (
-              <RankingButtonField name='testField' label='Test' required />
-            )}
+            {showField && <RankingButtonField name='testField' label='Test' required />}
           </FormProvider>
         )
       }
@@ -462,4 +445,3 @@ describe('RankingButtonField Component', () => {
     })
   })
 })
-

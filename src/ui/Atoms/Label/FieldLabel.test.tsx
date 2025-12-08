@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react'
 import { FieldLabel } from '@/ui/Atoms/Label/FieldLabel'
 
@@ -70,43 +71,27 @@ describe('FieldLabel Component', () => {
     })
 
     it('hides optional text when showOptional is false', () => {
-      render(
-        <FieldLabel
-          label='Field'
-          required={false}
-          config={{ showOptional: false }}
-        />
-      )
+      render(<FieldLabel label='Field' required={false} config={{ showOptional: false }} />)
 
       expect(screen.getByText('Field')).toBeInTheDocument()
       expect(screen.queryByTestId('optional-text')).not.toBeInTheDocument()
     })
 
     it('shows optional text when showOptional is true and not required', () => {
-      render(
-        <FieldLabel
-          label='Field'
-          required={false}
-          config={{ showOptional: true }}
-        />
-      )
+      render(<FieldLabel label='Field' required={false} config={{ showOptional: true }} />)
 
       expect(screen.getByTestId('optional-text')).toBeInTheDocument()
     })
 
     it('hides label container when showLabelContainer is false', () => {
-      render(
-        <FieldLabel label='Field' config={{ showLabelContainer: false }} />
-      )
+      render(<FieldLabel label='Field' config={{ showLabelContainer: false }} />)
 
       // When showLabelContainer is false, the wrapper div should not render
       expect(screen.queryByText('Field')).not.toBeInTheDocument()
     })
 
     it('shows label container when showLabelContainer is true', () => {
-      render(
-        <FieldLabel label='Field' config={{ showLabelContainer: true }} />
-      )
+      render(<FieldLabel label='Field' config={{ showLabelContainer: true }} />)
 
       expect(screen.getByText('Field')).toBeInTheDocument()
     })
@@ -163,18 +148,14 @@ describe('FieldLabel Component', () => {
 
   describe('Custom ClassName', () => {
     it('applies custom className', () => {
-      const { container } = render(
-        <FieldLabel label='Test' className='custom-class' />
-      )
+      const { container } = render(<FieldLabel label='Test' className='custom-class' />)
 
       const labelElement = container.querySelector('.custom-class')
       expect(labelElement).toBeInTheDocument()
     })
 
     it('merges custom className with default className', () => {
-      const { container } = render(
-        <FieldLabel label='Test' className='custom-class' />
-      )
+      const { container } = render(<FieldLabel label='Test' className='custom-class' />)
 
       const labelElement = container.querySelector('.font-medium.custom-class')
       expect(labelElement).toBeInTheDocument()
@@ -221,4 +202,3 @@ describe('FieldLabel Component', () => {
     })
   })
 })
-

@@ -9,7 +9,11 @@ jest.mock('@/ui/Atoms/Wrapper/ConditionalRender', () => ({
 
 // Mock Ant Design Tag component
 jest.mock('antd', () => ({
-  Tag: ({ children, className }: any) => <span className={className} data-testid='ant-tag'>{children}</span>
+  Tag: ({ children, className }: any) => (
+    <span className={className} data-testid='ant-tag'>
+      {children}
+    </span>
+  )
 }))
 
 describe('Badge/Tag Component', () => {
@@ -160,7 +164,11 @@ describe('Badge/Tag Component', () => {
     })
 
     it('renders dot with correct color classes', () => {
-      render(<Tag dot color='Primary'>Primary Dot</Tag>)
+      render(
+        <Tag dot color='Primary'>
+          Primary Dot
+        </Tag>
+      )
       const tag = screen.getByTestId('ant-tag')
       const dot = tag.querySelector('.rounded-full')
       expect(dot).toBeInTheDocument()
@@ -333,4 +341,3 @@ describe('Badge/Tag Component', () => {
     })
   })
 })
-

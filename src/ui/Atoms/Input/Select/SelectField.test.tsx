@@ -10,11 +10,40 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock Select component - it receives field props from react-hook-form
 jest.mock('@/ui/Atoms/Input/Select/Select', () => ({
-  Select: ({ label, error, constant, disabled, ...restProps }: any) => {
+   
+  Select: ({
+    label,
+    error,
+    constant,
+    disabled,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    showSearch: _showSearch,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    classNames: _classNames,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    prefixComponent: _prefixComponent,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    selectSize: _selectSize,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    filterOption: _filterOption,
+    ...restProps
+  }: any) => {
     // Extract field props that Controller passes
     const { onChange, onBlur, value = '', name, ref, ...fieldProps } = restProps
     const fieldName = name || 'unknown'
-    
+
+    // Filter out non-DOM props to avoid React warnings
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    const {
+      showSearch: _unused1,
+      classNames: _unused2,
+      prefixComponent: _unused3,
+      selectSize: _unused4,
+      filterOption: _unused5,
+      ...domProps
+    } = fieldProps
+    /* eslint-enable @typescript-eslint/no-unused-vars */
+
     return (
       <div>
         {label && <label htmlFor={fieldName}>{label}</label>}
@@ -28,7 +57,7 @@ jest.mock('@/ui/Atoms/Input/Select/Select', () => ({
           disabled={disabled}
           data-testid={`select-${fieldName}`}
           aria-invalid={!!error}
-          {...fieldProps}
+          {...domProps}
         >
           <option value=''>Select an option</option>
           {constant?.map((item: any, index: number) => (
@@ -262,12 +291,7 @@ describe('SelectField Component', () => {
     it('marks select as invalid when error exists', () => {
       render(
         <FormWrapper>
-          <SelectField
-            name='testField'
-            label='Test'
-            constant={mockOptions}
-            error='Error message'
-          />
+          <SelectField name='testField' label='Test' constant={mockOptions} error='Error message' />
         </FormWrapper>
       )
 
@@ -378,4 +402,3 @@ describe('SelectField Component', () => {
     })
   })
 })
-

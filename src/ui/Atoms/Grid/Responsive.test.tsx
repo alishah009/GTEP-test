@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react'
 import { Responsive } from '@/ui/Atoms/Grid/Responsive'
 
@@ -190,4 +191,3 @@ describe('Responsive Component', () => {
     })
   })
 })
-
