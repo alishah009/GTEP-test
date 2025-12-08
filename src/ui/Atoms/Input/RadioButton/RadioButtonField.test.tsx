@@ -153,7 +153,12 @@ describe('RadioButtonField Component', () => {
     it('disables all radio buttons when disabled prop is true', () => {
       render(
         <FormWrapper>
-          <RadioButtonField name='testField' label='Disabled Field' constant={mockOptions} disabled />
+          <RadioButtonField
+            name='testField'
+            label='Disabled Field'
+            constant={mockOptions}
+            disabled
+          />
         </FormWrapper>
       )
 
@@ -468,4 +473,3 @@ describe('RadioButtonField Component', () => {
     })
   })
 })
-

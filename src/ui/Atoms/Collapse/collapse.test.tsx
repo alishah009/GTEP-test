@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react'
 import CollapseAtom from '@/ui/Atoms/Collapse/collapse'
 
@@ -16,13 +17,9 @@ jest.mock('antd', () => ({
           <div key={item.key || index} data-testid={`collapse-item-${index}`}>
             <div data-testid={`collapse-label-${index}`}>{item.label}</div>
             <div data-testid={`collapse-children-${index}`}>{item.children}</div>
-            {item.extra && (
-              <div data-testid={`collapse-extra-${index}`}>{item.extra}</div>
-            )}
+            {item.extra && <div data-testid={`collapse-extra-${index}`}>{item.extra}</div>}
             {expandIcon && (
-              <div data-testid={`collapse-icon-${index}`}>
-                {expandIcon({ isActive: false })}
-              </div>
+              <div data-testid={`collapse-icon-${index}`}>{expandIcon({ isActive: false })}</div>
             )}
           </div>
         ))}
@@ -161,18 +158,14 @@ describe('CollapseAtom Component', () => {
 
   describe('Custom ClassName', () => {
     it('applies custom extraClass', () => {
-      const { container } = render(
-        <CollapseAtom data={mockData} extraClass='custom-class' />
-      )
+      const { container } = render(<CollapseAtom data={mockData} extraClass='custom-class' />)
 
       const collapse = container.querySelector('.custom-class')
       expect(collapse).toBeInTheDocument()
     })
 
     it('merges custom extraClass with default className', () => {
-      const { container } = render(
-        <CollapseAtom data={mockData} extraClass='custom-class' />
-      )
+      const { container } = render(<CollapseAtom data={mockData} extraClass='custom-class' />)
 
       const collapse = container.querySelector('.VMS_CUSTOM_COLLAPSE.custom-class')
       expect(collapse).toBeInTheDocument()
@@ -252,4 +245,3 @@ describe('CollapseAtom Component', () => {
     })
   })
 })
-

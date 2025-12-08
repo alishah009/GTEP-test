@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Mock chart.js first (before imports)
 jest.mock('chart.js', () => {
   const mockRegister = jest.fn()
@@ -260,9 +261,7 @@ describe('ChartAtom Component', () => {
     })
 
     it('updates when props change', () => {
-      const { rerender } = render(
-        <ChartAtom data={mockChartData} options={mockChartOptions} />
-      )
+      const { rerender } = render(<ChartAtom data={mockChartData} options={mockChartOptions} />)
 
       expect(screen.getByTestId('chart-line')).toBeInTheDocument()
 
@@ -285,4 +284,3 @@ describe('ChartAtom Component', () => {
     })
   })
 })
-

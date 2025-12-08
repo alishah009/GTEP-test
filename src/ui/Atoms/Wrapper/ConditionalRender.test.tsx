@@ -152,7 +152,7 @@ describe('ConditionalRender Component', () => {
 
   describe('Empty States', () => {
     it('renders empty fragment when render is false', () => {
-      const { container } = render(
+      render(
         <ConditionalRender render={false}>
           <div>Should not render</div>
         </ConditionalRender>
@@ -174,4 +174,3 @@ describe('ConditionalRender Component', () => {
     })
   })
 })
-

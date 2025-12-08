@@ -10,7 +10,8 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock MultiCheckBox component
 jest.mock('@/ui/Atoms/Input/MultiCheckBox/MultiCheckBox', () => ({
-  MultiCheckBox: ({ label, error, constant, disabled, field, ...restProps }: any) => {
+  MultiCheckBox: ({ label, error, constant, disabled, field }: any) => {
+    // restProps removed since it's unused
     const { onChange, onBlur, value = [], name, ref, ...fieldProps } = field || {}
     const fieldName = name || 'unknown'
 
@@ -166,7 +167,12 @@ describe('MultiCheckBoxField Component', () => {
     it('disables all checkboxes when disabled prop is true', () => {
       render(
         <FormWrapper>
-          <MultiCheckBoxField name='testField' label='Disabled Field' constant={mockOptions} disabled />
+          <MultiCheckBoxField
+            name='testField'
+            label='Disabled Field'
+            constant={mockOptions}
+            disabled
+          />
         </FormWrapper>
       )
 
@@ -498,4 +504,3 @@ describe('MultiCheckBoxField Component', () => {
     })
   })
 })
-

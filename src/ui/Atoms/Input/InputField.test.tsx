@@ -10,10 +10,10 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock Input component
 jest.mock('@/ui/Atoms/Input/Input', () => ({
-  Input: ({ label, error, disabled, classNames, fieldType, type, ...field }: any) => {
+  Input: ({ label, error, disabled, fieldType, type, ...field }: any) => {
     // Extract react-hook-form field props
     const { onChange, onBlur, value = '', name, ref, ...inputProps } = field
-    
+
     // Determine input type based on fieldType (matching Input.tsx logic)
     let inputType = type || 'text'
     if (fieldType === 'Numeric' || fieldType === 'Float') {
@@ -21,7 +21,7 @@ jest.mock('@/ui/Atoms/Input/Input', () => ({
     } else if (fieldType === 'AlphaNumeric') {
       inputType = 'text'
     }
-    
+
     return (
       <div>
         {label && <label htmlFor={name}>{label}</label>}
@@ -54,7 +54,7 @@ jest.mock('@/ui/Atoms/Input/utils/getNestedError', () => ({
 
 // Test wrapper component
 const FormWrapper = ({ children, defaultValues = {} }: any) => {
-  const methods = useForm({ 
+  const methods = useForm({
     defaultValues,
     mode: 'onChange'
   })
@@ -428,4 +428,3 @@ describe('InputField Component', () => {
     })
   })
 })
-

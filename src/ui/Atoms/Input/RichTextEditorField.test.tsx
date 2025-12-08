@@ -119,11 +119,7 @@ describe('RichTextEditorField Component', () => {
     it('does not mark field as required when required is false', () => {
       render(
         <FormWrapper>
-          <RichTextEditorField
-            name='testField'
-            label='Optional Field'
-            required={false}
-          />
+          <RichTextEditorField name='testField' label='Optional Field' required={false} />
         </FormWrapper>
       )
 
@@ -136,11 +132,7 @@ describe('RichTextEditorField Component', () => {
     it('displays error message when error prop is provided', () => {
       render(
         <FormWrapper>
-          <RichTextEditorField
-            name='testField'
-            label='Test'
-            error='This field has an error'
-          />
+          <RichTextEditorField name='testField' label='Test' error='This field has an error' />
         </FormWrapper>
       )
 
@@ -245,9 +237,7 @@ describe('RichTextEditorField Component', () => {
         const methods = useForm()
         return (
           <FormProvider {...methods}>
-            {showField && (
-              <RichTextEditorField name='testField' label='Test' required />
-            )}
+            {showField && <RichTextEditorField name='testField' label='Test' required />}
           </FormProvider>
         )
       }
@@ -345,11 +335,7 @@ describe('RichTextEditorField Component', () => {
     it('accepts responsive prop', () => {
       render(
         <FormWrapper>
-          <RichTextEditorField
-            name='testField'
-            label='Test'
-            responsive={[1, 2]}
-          />
+          <RichTextEditorField name='testField' label='Test' responsive={[1, 2]} />
         </FormWrapper>
       )
 
@@ -358,4 +344,3 @@ describe('RichTextEditorField Component', () => {
     })
   })
 })
-

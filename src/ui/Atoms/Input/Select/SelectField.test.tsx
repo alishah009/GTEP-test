@@ -14,7 +14,7 @@ jest.mock('@/ui/Atoms/Input/Select/Select', () => ({
     // Extract field props that Controller passes
     const { onChange, onBlur, value = '', name, ref, ...fieldProps } = restProps
     const fieldName = name || 'unknown'
-    
+
     return (
       <div>
         {label && <label htmlFor={fieldName}>{label}</label>}
@@ -262,12 +262,7 @@ describe('SelectField Component', () => {
     it('marks select as invalid when error exists', () => {
       render(
         <FormWrapper>
-          <SelectField
-            name='testField'
-            label='Test'
-            constant={mockOptions}
-            error='Error message'
-          />
+          <SelectField name='testField' label='Test' constant={mockOptions} error='Error message' />
         </FormWrapper>
       )
 
@@ -378,4 +373,3 @@ describe('SelectField Component', () => {
     })
   })
 })
-

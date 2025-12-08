@@ -209,12 +209,7 @@ describe('TextAreaField Component', () => {
     it('displays error message when error prop is provided', () => {
       render(
         <FormWrapper>
-          <TextAreaField
-            name='testField'
-            label='Test'
-            rows={4}
-            error='This field has an error'
-          />
+          <TextAreaField name='testField' label='Test' rows={4} error='This field has an error' />
         </FormWrapper>
       )
 
@@ -344,12 +339,7 @@ describe('TextAreaField Component', () => {
     it('applies custom className', () => {
       render(
         <FormWrapper>
-          <TextAreaField
-            name='testField'
-            label='Test'
-            rows={4}
-            className='custom-textarea-class'
-          />
+          <TextAreaField name='testField' label='Test' rows={4} className='custom-textarea-class' />
         </FormWrapper>
       )
 
@@ -396,4 +386,3 @@ describe('TextAreaField Component', () => {
     })
   })
 })
-

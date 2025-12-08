@@ -150,11 +150,7 @@ describe('RadioButtonActionField Component', () => {
     it('enables radio buttons when disabled prop is false', () => {
       render(
         <FormWrapper>
-          <RadioButtonActionField
-            name='testField'
-            label='Enabled Field'
-            disabled={false}
-          />
+          <RadioButtonActionField name='testField' label='Enabled Field' disabled={false} />
         </FormWrapper>
       )
 
@@ -245,11 +241,7 @@ describe('RadioButtonActionField Component', () => {
     it('displays error message when error prop is provided', () => {
       render(
         <FormWrapper>
-          <RadioButtonActionField
-            name='testField'
-            label='Test'
-            error='This field has an error'
-          />
+          <RadioButtonActionField name='testField' label='Test' error='This field has an error' />
         </FormWrapper>
       )
 
@@ -282,7 +274,7 @@ describe('RadioButtonActionField Component', () => {
 
       await waitFor(() => {
         // Error should be displayed when validation fails
-        const errorElement = screen.queryByTestId('error-testField')
+        // const errorElement = screen.queryByTestId('error-testField')
         // Note: The error might not appear immediately due to validation timing
         expect(button).toBeInTheDocument()
       })
@@ -368,9 +360,7 @@ describe('RadioButtonActionField Component', () => {
         const methods = useForm()
         return (
           <FormProvider {...methods}>
-            {showField && (
-              <RadioButtonActionField name='testField' label='Test' />
-            )}
+            {showField && <RadioButtonActionField name='testField' label='Test' />}
           </FormProvider>
         )
       }
@@ -482,4 +472,3 @@ describe('RadioButtonActionField Component', () => {
     })
   })
 })
-

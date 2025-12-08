@@ -54,10 +54,15 @@ export const SelectField = <T extends FieldValues>({
           required: !required ? false : `${label || 'This'} is required!`
         }}
         render={({ field }) => {
+          // Extract field props - exclude 'name' and 'ref' as they're not needed by Ant Design Select
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { name: _fieldName, ref: _ref, ...fieldProps } = field
+
           return (
             <Select
               {...rest}
-              {...field}
+              {...fieldProps}
+              name={name}
               showSearch={showSearch}
               label={label}
               constant={constant}
