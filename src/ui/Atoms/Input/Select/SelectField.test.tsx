@@ -28,7 +28,7 @@ jest.mock('@/ui/Atoms/Input/Select/Select', () => ({
     ...restProps
   }: any) => {
     // Extract field props that Controller passes
-    const { onChange, onBlur, value = '', name, ref, ...fieldProps } = restProps
+    const { onChange, onBlur, value = '', name, ref, ...domProps } = restProps
     const fieldName = name || 'unknown'
 
     return (

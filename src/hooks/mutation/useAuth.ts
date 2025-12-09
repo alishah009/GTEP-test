@@ -8,9 +8,15 @@ import { Role } from '@/enum/User'
 import { MessageInstance } from 'antd/es/message/interface'
 
 // Login mutation
-export function useLogin(messageApi: MessageInstance) {
+export function useLogin(
+  messageApi: MessageInstance,
+  options?: {
+    redirectTo?: string
+  }
+) {
   const queryClient = useQueryClient()
   const router = useRouter()
+  const redirectTo = options?.redirectTo ?? '/'
 
   return useMutation({
     mutationFn: async ({ email, password }: { email: string; password: string }) => {
@@ -32,7 +38,7 @@ export function useLogin(messageApi: MessageInstance) {
         type: 'success',
         content: 'Login Successfully'
       })
-      router.push('/')
+      router.replace(redirectTo)
     },
     onMutate: () => {
       messageApi.open({
@@ -125,8 +131,9 @@ export function useLogout(messageApi: MessageInstance) {
     },
     onSuccess: () => {
       // Clear session from cache
-      queryClient.setQueryData(['session'], null)
-      router.push('/login')
+      queryClient.clear()
+      router.replace('/login')
+      router.refresh()
     },
     onMutate: () => {
       messageApi.open({

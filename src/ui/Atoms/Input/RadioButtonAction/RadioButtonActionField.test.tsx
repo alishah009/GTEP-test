@@ -39,7 +39,6 @@ jest.mock('@/ui/Atoms/Input/RadioButton/RadioButtonField', () => ({
             const isChecked = currentValue === item.key
             return (
               <label key={index} htmlFor={`${fieldName}-${index}`}>
-                {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
                 <input
                   id={`${fieldName}-${index}`}
                   name={fieldName}
@@ -51,7 +50,6 @@ jest.mock('@/ui/Atoms/Input/RadioButton/RadioButtonField', () => ({
                   ref={index === 0 ? ref : undefined}
                   disabled={disabled}
                   data-testid={`radio-${fieldName}-${index}`}
-                  aria-invalid={!!error ? 'true' : 'false'}
                   aria-checked={isChecked ? 'true' : 'false'}
                   {...Object.fromEntries(
                     Object.entries(fieldProps).filter(([key]) => key !== 'defaultChecked')
@@ -276,10 +274,8 @@ describe('RadioButtonActionField Component', () => {
       fireEvent.click(button)
 
       await waitFor(() => {
-        // Error should be displayed when validation fails
-        // const errorElement = screen.queryByTestId('error-testField')
-        // Note: The error might not appear immediately due to validation timing
-        expect(button).toBeInTheDocument()
+        const radios = screen.getAllByRole('radio')
+        expect(radios.length).toBeGreaterThan(0)
       })
     })
 
@@ -291,9 +287,8 @@ describe('RadioButtonActionField Component', () => {
       )
 
       const radioButtons = screen.getAllByRole('radio')
-      radioButtons.forEach((radio) => {
-        expect(radio).toHaveAttribute('aria-invalid', 'true')
-      })
+      expect(radioButtons.length).toBeGreaterThan(0)
+      expect(screen.getByTestId('error-testField')).toBeInTheDocument()
     })
   })
 
