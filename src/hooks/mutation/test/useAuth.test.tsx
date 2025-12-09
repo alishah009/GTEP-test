@@ -24,7 +24,8 @@ jest.mock('@/lib/supabase/supabaseBrowser', () => ({
 
 const mockRouter = {
   push: jest.fn(),
-  replace: jest.fn()
+  replace: jest.fn(),
+  refresh: jest.fn()
 }
 
 const mockMessageApi: MessageInstance = {
@@ -711,7 +712,7 @@ describe('useAuth Mutations', () => {
 
         const { result } = renderHook(() => useLogout(mockMessageApi), { wrapper })
 
-        const setQueryDataSpy = jest.spyOn(queryClient, 'setQueryData')
+        const clearSpy = jest.spyOn(queryClient, 'clear')
 
         result.current.mutate()
 
@@ -719,7 +720,7 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(setQueryDataSpy).toHaveBeenCalledWith(['session'], null)
+        expect(clearSpy).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -737,8 +738,9 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(mockRouter.push).toHaveBeenCalledWith('/login')
-        expect(mockRouter.push).toHaveBeenCalledTimes(1)
+        expect(mockRouter.replace).toHaveBeenCalledWith('/login')
+        expect(mockRouter.replace).toHaveBeenCalledTimes(1)
+        expect(mockRouter.refresh).toHaveBeenCalledTimes(1)
       })
     })
 
