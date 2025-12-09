@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -26,7 +25,6 @@ jest.mock('@/ui/Atoms/Input/Ranking/RankingButton', () => ({
           />
           <div role='radiogroup' aria-label='Rating'>
             {[1, 2, 3, 4, 5].map((star) => (
-              /* eslint-disable-next-line jsx-a11y/role-supports-aria-props */
               <button
                 key={star}
                 type='button'
@@ -36,7 +34,6 @@ jest.mock('@/ui/Atoms/Input/Ranking/RankingButton', () => ({
                 disabled={disabled}
                 onClick={() => onChange?.(star)}
                 className={value >= star ? 'checked' : ''}
-                aria-invalid={!!error}
               >
                 ★
               </button>
@@ -265,7 +262,8 @@ describe('RankingButtonField Component', () => {
 
       await waitFor(() => {
         const stars = screen.getAllByRole('radio')
-        expect(stars[0]).toHaveAttribute('aria-invalid', 'true')
+        expect(stars.length).toBeGreaterThan(0)
+        expect(screen.getByTestId('error-testField')).toBeInTheDocument()
       })
     })
 
@@ -277,9 +275,8 @@ describe('RankingButtonField Component', () => {
       )
 
       const stars = screen.getAllByRole('radio')
-      stars.forEach((star) => {
-        expect(star).toHaveAttribute('aria-invalid', 'true')
-      })
+      expect(stars.length).toBeGreaterThan(0)
+      expect(screen.getByTestId('error-testField')).toBeInTheDocument()
     })
   })
 

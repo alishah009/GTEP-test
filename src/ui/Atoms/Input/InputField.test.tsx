@@ -12,7 +12,7 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 jest.mock('@/ui/Atoms/Input/Input', () => ({
   Input: ({ label, error, disabled, fieldType, type, ...field }: any) => {
     // Extract react-hook-form field props
-    const { onChange, onBlur, value = '', name, ref, ...inputProps } = field
+    const { onChange, onBlur, value = '', name, ref, ...domProps } = field
 
     // Determine input type based on fieldType (matching Input.tsx logic)
     let inputType = type || 'text'
