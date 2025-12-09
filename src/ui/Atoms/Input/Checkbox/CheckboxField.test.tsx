@@ -27,6 +27,10 @@ jest.mock('@/ui/Atoms/Input/InputField', () => {
       const fieldName = name || 'unknown'
       const isCheckbox = type === 'Checkbox'
 
+      // Filter out non-DOM props to avoid React warnings
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { classNames: _unused, ...domProps } = fieldProps
+
       if (isCheckbox) {
         // For checkboxes, use value from field or track it locally
         const checked = value !== undefined && value !== null && value !== '' ? !!value : false
@@ -59,7 +63,7 @@ jest.mock('@/ui/Atoms/Input/InputField', () => {
                 disabled={disabled}
                 data-testid={`checkbox-${fieldName}`}
                 aria-invalid={!!error}
-                {...fieldProps}
+                {...domProps}
               />
               {label}
             </label>
@@ -82,7 +86,7 @@ jest.mock('@/ui/Atoms/Input/InputField', () => {
             disabled={disabled}
             data-testid={`input-${fieldName}`}
             aria-invalid={!!error}
-            {...fieldProps}
+            {...domProps}
           />
           {error && <span data-testid={`error-${fieldName}`}>{error}</span>}
         </div>

@@ -74,5 +74,61 @@ html.dark .text-gray-900 {
 }
 
 html.dark .text-gray-600 {
+  color: #cbd5e1;
+}
+
+html.dark .text-gray-700 {
+  color: #e2e8f0;
+}
+
+html.dark .text-gray-500 {
   color: #94a3b8;
+}
+
+html.dark .text-gray-400 {
+  color: #94a3b8;
+}
+
+html.dark .bg-gray-100 {
+  background-color: #334155;
+}
+
+html.dark .bg-gray-50 {
+  background-color: #1e293b;
+}
+
+html.dark .hover\:bg-gray-50:hover {
+  background-color: #334155;
+}
+
+html.dark .hover\:bg-gray-100:hover {
+  background-color: #334155;
+}
+
+html.dark .hover\:text-gray-900:hover {
+  color: #f8fafc !important;
+}
+
+html.dark .hover\:text-gray-900:hover svg,
+html.dark .hover\:text-gray-900:hover span svg,
+html.dark .hover\:text-gray-900:hover * svg {
+  color: #f8fafc !important;
+  fill: #f8fafc !important;
+}
+
+/* Sidebar menu items - ensure all child elements get hover color */
+html.dark nav a.hover\:text-gray-900:hover,
+html.dark nav a.hover\:text-gray-900:hover *,
+html.dark nav a.hover\:text-gray-900:hover svg {
+  color: #f8fafc !important;
+  fill: #f8fafc !important;
+}
+
+html.dark .border-gray-200 {
+  border-color: #334155;
+}
+
+/* Ensure icons inherit text color properly in dark mode */
+html.dark svg {
+  color: inherit;
 }

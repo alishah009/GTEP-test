@@ -36,7 +36,7 @@ jest.mock('@/ui/Atoms/Input/Input', () => ({
           disabled={disabled}
           data-testid={`input-${name}`}
           aria-invalid={!!error}
-          {...inputProps}
+          {...domProps}
         />
         {error && <span data-testid={`error-${name}`}>{error}</span>}
       </div>

@@ -39,6 +39,7 @@ jest.mock('@/ui/Atoms/Input/RadioButton/RadioButtonField', () => ({
             const isChecked = currentValue === item.key
             return (
               <label key={index} htmlFor={`${fieldName}-${index}`}>
+                {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
                 <input
                   id={`${fieldName}-${index}`}
                   name={fieldName}
@@ -52,7 +53,9 @@ jest.mock('@/ui/Atoms/Input/RadioButton/RadioButtonField', () => ({
                   data-testid={`radio-${fieldName}-${index}`}
                   aria-invalid={!!error ? 'true' : 'false'}
                   aria-checked={isChecked ? 'true' : 'false'}
-                  {...fieldProps}
+                  {...Object.fromEntries(
+                    Object.entries(fieldProps).filter(([key]) => key !== 'defaultChecked')
+                  )}
                 />
                 {item.value}
               </label>

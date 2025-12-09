@@ -25,6 +25,7 @@ jest.mock('@/ui/Atoms/Input/Ranking/RankingButton', () => ({
           />
           <div role='radiogroup' aria-label='Rating'>
             {[1, 2, 3, 4, 5].map((star) => (
+              /* eslint-disable-next-line jsx-a11y/role-supports-aria-props */
               <button
                 key={star}
                 type='button'

@@ -10,10 +10,22 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock RadioButton component
 jest.mock('@/ui/Atoms/Input/RadioButton/RadioButton', () => ({
-  RadioButton: ({ label, error, constant, disabled, ...restProps }: any) => {
+  RadioButton: ({
+    label,
+    error,
+    constant,
+    disabled,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    classNames: _classNames,
+    ...restProps
+  }: any) => {
     // Extract field props that Controller passes
     const { onChange, onBlur, value, name, ref, ...fieldProps } = restProps
     const fieldName = name || 'unknown'
+
+    // Filter out non-DOM props to avoid React warnings
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { classNames: _unused, ...domProps } = fieldProps
 
     return (
       <div>
@@ -21,6 +33,7 @@ jest.mock('@/ui/Atoms/Input/RadioButton/RadioButton', () => ({
         <div role='radiogroup' data-testid={`radiogroup-${fieldName}`}>
           {constant?.map((item: any, index: number) => (
             <label key={index} htmlFor={`${fieldName}-${index}`}>
+              {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
               <input
                 id={`${fieldName}-${index}`}
                 name={fieldName}
@@ -33,7 +46,7 @@ jest.mock('@/ui/Atoms/Input/RadioButton/RadioButton', () => ({
                 disabled={disabled}
                 data-testid={`radio-${fieldName}-${index}`}
                 aria-invalid={!!error}
-                {...fieldProps}
+                {...domProps}
               />
               {item.value}
             </label>
