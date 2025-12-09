@@ -20,7 +20,7 @@ export function Login() {
 
   const { handleSubmit } = methods
   const [messageApi, contextHolder] = message.useMessage()
-  const { mutateAsync, isPending } = useLogin(messageApi)
+  const { mutateAsync, isPending } = useLogin(messageApi, { redirectTo: `/${locale}/` })
 
   const login = async ({ email, password }: LoginFormType) => {
     try {

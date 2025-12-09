@@ -23,7 +23,8 @@ jest.mock('@/lib/supabase/supabaseBrowser', () => ({
 }))
 
 const mockRouter = {
-  push: jest.fn()
+  push: jest.fn(),
+  replace: jest.fn()
 }
 
 const mockMessageApi: MessageInstance = {
@@ -150,8 +151,8 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(mockRouter.push).toHaveBeenCalledWith('/')
-        expect(mockRouter.push).toHaveBeenCalledTimes(1)
+        expect(mockRouter.replace).toHaveBeenCalledWith('/')
+        expect(mockRouter.replace).toHaveBeenCalledTimes(1)
       })
     })
 

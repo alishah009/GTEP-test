@@ -46,7 +46,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null)
     setSession(null)
     resetTheme()
-    router.push('/login')
+    router.replace('/login')
+    router.refresh()
   }, [resetTheme, router])
 
   // Load session on mount
