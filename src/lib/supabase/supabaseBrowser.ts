@@ -32,17 +32,17 @@ export const getAuthPersistence = (): PersistenceMode => {
  */
 export const clearSupabaseCookies = () => {
   if (typeof document === 'undefined') return
-  
+
   const cookies = document.cookie.split(';')
   const cookieNames: string[] = []
-  
+
   cookies.forEach((cookie) => {
     const [name] = cookie.trim().split('=')
     if (name && (name.startsWith('sb-') || name.includes('supabase'))) {
       cookieNames.push(name)
     }
   })
-  
+
   // Clear each cookie with common paths
   cookieNames.forEach((name) => {
     const paths = ['/', '/en', '/es']
@@ -154,13 +154,13 @@ export const getSupabaseClient = () => {
 if (typeof window !== 'undefined') {
   const hasLocalFlag = window.localStorage.getItem(PERSISTENCE_KEY) === PersistenceMode.Local
   const hasSessionFlag = window.sessionStorage.getItem(PERSISTENCE_KEY) === PersistenceMode.Session
-  
+
   if (!hasLocalFlag && !hasSessionFlag) {
     const hasAuthCookies = document.cookie.split(';').some((cookie) => {
       const name = cookie.trim().split('=')[0]
       return name && (name.startsWith('sb-') || name.includes('supabase'))
     })
-    
+
     if (hasAuthCookies) {
       clearSupabaseCookies()
     }

@@ -67,7 +67,9 @@ export function Login() {
           <div className='flex w-full items-center justify-between text-sm text-gray-500'>
             <Checkbox
               name='rememberMe'
-              label={(dict.auth.login as Record<string, string | undefined>).rememberMe ?? 'Remember me'}
+              label={
+                (dict.auth.login as Record<string, string | undefined>).rememberMe ?? 'Remember me'
+              }
               className='w-auto accent-primary-600'
               classNames={{
                 wrapper: 'flex-row items-center gap-2',
