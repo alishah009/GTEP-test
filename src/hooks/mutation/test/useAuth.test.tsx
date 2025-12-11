@@ -11,16 +11,27 @@ import { MessageInstance } from 'antd/es/message/interface'
 
 // Mock dependencies
 jest.mock('next/navigation')
-jest.mock('@/lib/supabase/supabaseBrowser', () => ({
-  supabase: {
+jest.mock('@/lib/supabase/supabaseBrowser', () => {
+  const supabaseMock = {
     auth: {
       signInWithPassword: jest.fn(),
       signUp: jest.fn(),
-      signOut: jest.fn()
+      signOut: jest.fn(),
+      getSession: jest.fn(),
+      getUser: jest.fn()
     },
     from: jest.fn()
   }
-}))
+  return {
+    supabase: supabaseMock,
+    getSupabaseClient: jest.fn(() => supabaseMock),
+    setAuthPersistence: jest.fn(),
+    PersistenceMode: {
+      Local: 'local',
+      Session: 'session'
+    }
+  }
+})
 
 const mockRouter = {
   push: jest.fn(),

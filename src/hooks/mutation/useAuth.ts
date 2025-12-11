@@ -1,7 +1,11 @@
 'use client'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '@/lib/supabase/supabaseBrowser'
+import {
+  getSupabaseClient,
+  setAuthPersistence,
+  PersistenceMode
+} from '@/lib/supabase/supabaseBrowser'
 import { useRouter } from 'next/navigation'
 import { User } from '@/entity/User'
 import { Role } from '@/enum/User'
@@ -17,9 +21,24 @@ export function useLogin(
   const queryClient = useQueryClient()
   const router = useRouter()
   const redirectTo = options?.redirectTo ?? '/'
-
   return useMutation({
-    mutationFn: async ({ email, password }: { email: string; password: string }) => {
+    mutationFn: async ({
+      email,
+      password,
+      rememberMe
+    }: {
+      email: string
+      password: string
+      rememberMe?: boolean
+    }) => {
+      // Treat missing/false as session-only; only explicit true persists
+      const shouldRemember = rememberMe === true
+      const persistenceMode = shouldRemember ? PersistenceMode.Local : PersistenceMode.Session
+
+      setAuthPersistence(persistenceMode)
+
+      // Use the shared client - it uses dynamic storage that checks persistence mode
+      const supabase = getSupabaseClient()
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -28,6 +47,7 @@ export function useLogin(
       if (error) {
         throw error
       }
+
       return data
     },
     onSuccess: () => {
@@ -62,6 +82,7 @@ export function useLogin(
 export function useSignup(messageApi: MessageInstance) {
   const queryClient = useQueryClient()
   const router = useRouter()
+  const supabase = getSupabaseClient()
 
   return useMutation({
     mutationFn: async (user: User) => {
@@ -126,8 +147,14 @@ export function useLogout(messageApi: MessageInstance) {
 
   return useMutation({
     mutationFn: async () => {
+      const supabase = getSupabaseClient()
       const { error } = await supabase.auth.signOut()
       if (error) throw error
+      // Clear persistence flags and any remaining tokens
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem('gtep:auth:persistence')
+        window.sessionStorage.removeItem('gtep:auth:persistence')
+      }
     },
     onSuccess: () => {
       // Clear session from cache
