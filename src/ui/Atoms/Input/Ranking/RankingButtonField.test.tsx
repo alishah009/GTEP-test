@@ -34,7 +34,6 @@ jest.mock('@/ui/Atoms/Input/Ranking/RankingButton', () => ({
                 disabled={disabled}
                 onClick={() => onChange?.(star)}
                 className={value >= star ? 'checked' : ''}
-                aria-invalid={!!error}
               >
                 ★
               </button>
@@ -263,7 +262,8 @@ describe('RankingButtonField Component', () => {
 
       await waitFor(() => {
         const stars = screen.getAllByRole('radio')
-        expect(stars[0]).toHaveAttribute('aria-invalid', 'true')
+        expect(stars.length).toBeGreaterThan(0)
+        expect(screen.getByTestId('error-testField')).toBeInTheDocument()
       })
     })
 
@@ -275,9 +275,8 @@ describe('RankingButtonField Component', () => {
       )
 
       const stars = screen.getAllByRole('radio')
-      stars.forEach((star) => {
-        expect(star).toHaveAttribute('aria-invalid', 'true')
-      })
+      expect(stars.length).toBeGreaterThan(0)
+      expect(screen.getByTestId('error-testField')).toBeInTheDocument()
     })
   })
 

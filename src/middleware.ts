@@ -67,15 +67,24 @@ export async function middleware(request: NextRequest) {
     }
   })
 
+  // Fetch session and validate it to avoid stale/invalid cookies granting access
   const {
     data: { session }
   } = await supabase.auth.getSession()
+
+  let validSession = session
+  if (session?.access_token) {
+    const { data: userData, error: userError } = await supabase.auth.getUser()
+    if (userError || !userData?.user) {
+      validSession = null
+    }
+  }
 
   // Strip locale from path for route checking
   const pathWithoutLocale = stripLocale(pathname)
 
   // Redirect logged-in users away from /login and /signup
-  if ((pathWithoutLocale === '/login' || pathWithoutLocale === '/signup') && session) {
+  if ((pathWithoutLocale === '/login' || pathWithoutLocale === '/signup') && validSession) {
     const locale = pathname.split('/')[1]
     return NextResponse.redirect(new URL(`/${locale}/`, request.url))
   }
@@ -83,16 +92,16 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = pathWithoutLocale === '/login' || pathWithoutLocale === '/signup'
 
   // Protect all paths except /login and /signup
-  if (!isAuthRoute && !session) {
+  if (!isAuthRoute && !validSession) {
     const locale = pathname.split('/')[1]
     return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
   }
 
-  if (session) {
+  if (validSession) {
     const { data: profile } = await supabase
       .from('users')
       .select('role')
-      .eq('id', session.user.id)
+      .eq('id', validSession.user.id)
       .single()
 
     const userRole = (profile?.role as Role | null) ?? null

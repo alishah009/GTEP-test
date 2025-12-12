@@ -11,19 +11,32 @@ import { MessageInstance } from 'antd/es/message/interface'
 
 // Mock dependencies
 jest.mock('next/navigation')
-jest.mock('@/lib/supabase/supabaseBrowser', () => ({
-  supabase: {
+jest.mock('@/lib/supabase/supabaseBrowser', () => {
+  const supabaseMock = {
     auth: {
       signInWithPassword: jest.fn(),
       signUp: jest.fn(),
-      signOut: jest.fn()
+      signOut: jest.fn(),
+      getSession: jest.fn(),
+      getUser: jest.fn()
     },
     from: jest.fn()
   }
-}))
+  return {
+    supabase: supabaseMock,
+    getSupabaseClient: jest.fn(() => supabaseMock),
+    setAuthPersistence: jest.fn(),
+    PersistenceMode: {
+      Local: 'local',
+      Session: 'session'
+    }
+  }
+})
 
 const mockRouter = {
-  push: jest.fn()
+  push: jest.fn(),
+  replace: jest.fn(),
+  refresh: jest.fn()
 }
 
 const mockMessageApi: MessageInstance = {
@@ -150,8 +163,8 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(mockRouter.push).toHaveBeenCalledWith('/')
-        expect(mockRouter.push).toHaveBeenCalledTimes(1)
+        expect(mockRouter.replace).toHaveBeenCalledWith('/')
+        expect(mockRouter.replace).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -710,7 +723,7 @@ describe('useAuth Mutations', () => {
 
         const { result } = renderHook(() => useLogout(mockMessageApi), { wrapper })
 
-        const setQueryDataSpy = jest.spyOn(queryClient, 'setQueryData')
+        const clearSpy = jest.spyOn(queryClient, 'clear')
 
         result.current.mutate()
 
@@ -718,7 +731,7 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(setQueryDataSpy).toHaveBeenCalledWith(['session'], null)
+        expect(clearSpy).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -736,8 +749,9 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(mockRouter.push).toHaveBeenCalledWith('/login')
-        expect(mockRouter.push).toHaveBeenCalledTimes(1)
+        expect(mockRouter.replace).toHaveBeenCalledWith('/login')
+        expect(mockRouter.replace).toHaveBeenCalledTimes(1)
+        expect(mockRouter.refresh).toHaveBeenCalledTimes(1)
       })
     })
 

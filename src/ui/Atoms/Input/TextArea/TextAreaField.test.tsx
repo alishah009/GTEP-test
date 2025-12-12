@@ -10,10 +10,15 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock TextArea component
 jest.mock('@/ui/Atoms/Input/TextArea/TextArea', () => ({
-  TextArea: ({ label, error, rows, disabled, ...restProps }: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  TextArea: ({ label, error, rows, disabled, classNames: _classNames, ...restProps }: any) => {
     // Extract field props that Controller passes
     const { onChange, onBlur, value = '', name, ref, ...fieldProps } = restProps
     const fieldName = name || 'unknown'
+
+    // Filter out non-DOM props to avoid React warnings
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { classNames: _unused, ...domProps } = fieldProps
 
     return (
       <div>
@@ -29,7 +34,7 @@ jest.mock('@/ui/Atoms/Input/TextArea/TextArea', () => ({
           rows={rows || 4}
           data-testid={`textarea-${fieldName}`}
           aria-invalid={!!error}
-          {...fieldProps}
+          {...domProps}
         />
         {error && <span data-testid={`error-${fieldName}`}>{error}</span>}
       </div>

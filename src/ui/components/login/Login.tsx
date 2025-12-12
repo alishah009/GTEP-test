@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useLogin } from '@/hooks/mutation/useAuth'
 import { FormProvider, useForm } from 'react-hook-form'
 import { InputField } from '@/ui/Atoms/Input/InputField'
+import { Checkbox } from '@/ui/Atoms/Input/Checkbox/CheckboxField'
 import { message } from 'antd'
 import { Button } from '@/ui/Atoms/Button'
 import { useDictionary } from '@/hooks/i18n/useDictionary'
@@ -12,19 +13,20 @@ import { useDictionary } from '@/hooks/i18n/useDictionary'
 type LoginFormType = {
   email: string
   password: string
+  rememberMe?: boolean
 }
 
 export function Login() {
   const { dict, loading: dictLoading, locale } = useDictionary()
-  const methods = useForm<LoginFormType>({})
+  const methods = useForm<LoginFormType>({ defaultValues: { rememberMe: false } })
 
   const { handleSubmit } = methods
   const [messageApi, contextHolder] = message.useMessage()
-  const { mutateAsync, isPending } = useLogin(messageApi)
+  const { mutateAsync, isPending } = useLogin(messageApi, { redirectTo: `/${locale}/` })
 
-  const login = async ({ email, password }: LoginFormType) => {
+  const login = async ({ email, password, rememberMe }: LoginFormType) => {
     try {
-      await mutateAsync({ email, password })
+      await mutateAsync({ email, password, rememberMe })
     } catch {
       // noImp
     }
@@ -62,7 +64,20 @@ export function Login() {
             name='password'
             required={true}
           />
-          <div className='flex w-full justify-end text-sm text-gray-500'>
+          <div className='flex w-full items-center justify-between text-sm text-gray-500'>
+            <Checkbox
+              name='rememberMe'
+              label={
+                (dict.auth.login as Record<string, string | undefined>).rememberMe ?? 'Remember me'
+              }
+              className='w-auto accent-primary-600'
+              classNames={{
+                wrapper: 'flex-row items-center gap-2',
+                label: 'text-gray-900 text-sm',
+                root: 'm-0 p-0'
+              }}
+              config={{ showOptional: false }}
+            />
             <Link
               href={`/${locale}/forgot-password`}
               className='font-semibold text-primary-600 hover:text-primary-700'

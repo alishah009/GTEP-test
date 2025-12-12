@@ -12,7 +12,7 @@ export const Checkbox = <T extends FieldValues>({
   responsive,
   ...rest
 }: FormInputProps<T>) => {
-  const { clearErrors, resetField } = useFormContext()
+  const { clearErrors, resetField, setValue } = useFormContext()
 
   useEffect(() => {
     return () => {
@@ -38,7 +38,7 @@ export const Checkbox = <T extends FieldValues>({
       className={className}
       type='Checkbox'
       onChange={(e) => {
-        resetField(name, { defaultValue: e.target.value as any })
+        setValue(name, e.target.checked as any, { shouldValidate: true })
       }}
       {...rest}
     />

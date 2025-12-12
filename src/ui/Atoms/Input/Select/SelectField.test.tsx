@@ -10,9 +10,25 @@ jest.mock('@/ui/Atoms/Grid/Responsive', () => ({
 
 // Mock Select component - it receives field props from react-hook-form
 jest.mock('@/ui/Atoms/Input/Select/Select', () => ({
-  Select: ({ label, error, constant, disabled, ...restProps }: any) => {
+  Select: ({
+    label,
+    error,
+    constant,
+    disabled,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    showSearch: _showSearch,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    classNames: _classNames,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    prefixComponent: _prefixComponent,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    selectSize: _selectSize,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    filterOption: _filterOption,
+    ...restProps
+  }: any) => {
     // Extract field props that Controller passes
-    const { onChange, onBlur, value = '', name, ref, ...fieldProps } = restProps
+    const { onChange, onBlur, value = '', name, ref, ...domProps } = restProps
     const fieldName = name || 'unknown'
 
     return (
@@ -28,7 +44,7 @@ jest.mock('@/ui/Atoms/Input/Select/Select', () => ({
           disabled={disabled}
           data-testid={`select-${fieldName}`}
           aria-invalid={!!error}
-          {...fieldProps}
+          {...domProps}
         >
           <option value=''>Select an option</option>
           {constant?.map((item: any, index: number) => (
