@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { Session } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase/supabaseBrowser'
+import { getSupabaseClient } from '@/lib/supabase/supabaseBrowser'
 import { useTheme } from '@/context/ThemeContext'
 import { useUser } from '@/hooks/useUser'
 import { User } from '@/entity/User'
@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const supabase = getSupabaseClient()
   const router = useRouter()
   const { resetTheme } = useTheme()
 
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     resetTheme()
     router.replace('/login')
     router.refresh()
-  }, [resetTheme, router])
+  }, [resetTheme, router, supabase])
 
   // Load session on mount
   useEffect(() => {
@@ -64,12 +65,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     loadSession()
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      console.log('context newSession', newSession, _event)
       setSession(newSession)
     })
 
     return () => listener.subscription.unsubscribe()
-  }, [logout])
+  }, [logout, supabase])
 
   // Set user only after session & userData are ready
   useEffect(() => {
