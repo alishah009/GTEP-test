@@ -4,6 +4,9 @@ const config: Config = {
   content: ['./src/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './pages/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-poppins)', 'Poppins', 'sans-serif']
+      },
       colors: {
         primary: {
           25: 'var(--color-primary-25)',

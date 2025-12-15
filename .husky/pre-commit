@@ -11,4 +11,7 @@ fi
 yarn validate
 yarn test
 yarn prettier --write .
+
+# Stage any files that were modified by validate (lint:fix) or prettier
+git add -u
 # empty files , tests
