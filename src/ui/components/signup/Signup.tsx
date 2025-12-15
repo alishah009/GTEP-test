@@ -2,10 +2,12 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSignup } from '@/hooks/mutation/useAuth'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { InputField } from '@/ui/Atoms/Input/InputField'
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 import { message } from 'antd'
+import { useSignup } from '@/hooks/mutation/useAuth'
+import { InputField } from '@/ui/Atoms/Input/InputField'
 import { Button } from '@/ui/Atoms/Button'
 import { User } from '@/entity/User'
 import { useDictionary } from '@/hooks/i18n/useDictionary'
@@ -13,6 +15,7 @@ import { useDictionary } from '@/hooks/i18n/useDictionary'
 export function Signup() {
   const { dict, loading: dictLoading, locale } = useDictionary()
   const methods = useForm<User>({})
+  const [showPassword, setShowPassword] = useState(false)
 
   const { handleSubmit } = methods
   const [messageApi, contextHolder] = message.useMessage()
@@ -53,7 +56,21 @@ export function Signup() {
         <InputField label={dict.auth.signup.email} type='email' name='email' required={true} />
         <InputField
           label={dict.auth.signup.password}
-          type='password'
+          type={showPassword ? 'text' : 'password'}
+          suffixComponent={
+            <button
+              type='button'
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setShowPassword((prev) => !prev)
+              }}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              className='flex h-full items-center cursor-pointer text-gray-500 hover:text-primary-600 [&_svg]:cursor-pointer'
+            >
+              {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+            </button>
+          }
           name='password'
           required={true}
         />

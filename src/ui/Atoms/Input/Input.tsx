@@ -51,6 +51,7 @@ export const Input = ({
 }: CustomInputProps) => {
   const { label: labelClass, wrapper, ...restClasses } = classNames
   const generatedId = useId()
+  const isEmail = type === 'email'
 
   function suitableType(inputType: string | undefined | null) {
     switch (inputType) {
@@ -116,14 +117,16 @@ export const Input = ({
       {/* Input Field */}
       <AntDInput
         {...rest}
-        type={suitableType(fieldType)}
+        // Use text type for email to avoid native browser validation tooltips; rely on custom validation instead.
+        type={isEmail ? 'text' : suitableType(fieldType)}
+        inputMode={isEmail ? 'email' : rest.inputMode}
         prefix={prefixComponent}
         suffix={suffixComponent}
         status={error ? 'error' : undefined}
         classNames={restClasses}
         className={cn(
           InputSizeConfig[inputSize || 'md'],
-          'border-[0.5px] hover:border-primary-600! focus:border-[0.5px]! focus:border-primary-600! focus:ring-0! focus:shadow-none!',
+          'border-[0.5px] border-gray-300! hover:border-primary-600! focus:border-[0.5px]! focus:border-primary-600! focus:ring-0! focus:shadow-none! focus-within:border-primary-600!',
           className,
           {
             'border-red-500! focus:border-red-500! hover:border-red-500! focus:shadow-ShadowError100 AddOnStyle':
