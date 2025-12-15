@@ -67,17 +67,10 @@ export const Input = ({
 
   // Handle checkbox type specially - wrap input in label for clickability
   if (type === 'Checkbox') {
-    const {
-      value,
-      onChange,
-      name,
-      disabled,
-      id,
-      onBlur
-    } = rest
+    const { value, onChange, name, disabled, id, onBlur } = rest
     const inputId = id || name || `checkbox-${generatedId}`
     const checked = value !== undefined && value !== null && value !== '' ? !!value : false
-    
+
     return (
       <FieldWrapper
         config={{ ...config, showLabel: false }}

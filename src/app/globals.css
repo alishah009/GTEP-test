@@ -153,7 +153,6 @@ input[type='checkbox']:focus-within {
   cursor: pointer;
 }
 
-
 .ant-checkbox-wrapper .ant-checkbox:focus,
 .ant-checkbox-wrapper .ant-checkbox:focus-visible,
 .ant-checkbox-wrapper .ant-checkbox:focus-within {
