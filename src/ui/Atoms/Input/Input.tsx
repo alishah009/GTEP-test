@@ -50,6 +50,7 @@ export const Input = ({
   ...rest
 }: CustomInputProps) => {
   const { label: labelClass, wrapper, ...restClasses } = classNames
+  const isEmail = type === 'email'
 
   function suitableType(inputType: string | undefined | null) {
     switch (inputType) {
@@ -76,7 +77,9 @@ export const Input = ({
       {/* Input Field */}
       <AntDInput
         {...rest}
-        type={suitableType(fieldType)}
+        // Use text type for email to avoid native browser validation tooltips; rely on custom validation instead.
+        type={isEmail ? 'text' : suitableType(fieldType)}
+        inputMode={isEmail ? 'email' : rest.inputMode}
         prefix={prefixComponent}
         suffix={suffixComponent}
         status={error ? 'error' : undefined}

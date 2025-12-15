@@ -38,6 +38,7 @@ export const InputField = <T extends FieldValues>({
   responsive,
   sameAs,
   pattern,
+  type,
   decimal = undefined,
   ...rest
 }: FormInputProps<T>) => {
@@ -63,6 +64,15 @@ export const InputField = <T extends FieldValues>({
   const getError = () => {
     return error || getNestedError(errors, name)
   }
+
+  const resolvedPattern =
+    pattern ||
+    (type === 'email'
+      ? {
+          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+          message: `${label || 'Email'} is invalid`
+        }
+      : undefined)
 
   return (
     <Responsive
@@ -98,8 +108,8 @@ export const InputField = <T extends FieldValues>({
                 return `Maximum value ${max}!`
               }
 
-              if (pattern !== undefined && !pattern.value.test(value.toString())) {
-                return pattern.message || 'Please match the requested pattern '
+              if (resolvedPattern !== undefined && !resolvedPattern.value.test(value.toString())) {
+                return resolvedPattern.message || 'Please match the requested pattern '
               }
 
               if (min !== undefined && parseInt(value.toString()) < +min) {
@@ -145,6 +155,7 @@ export const InputField = <T extends FieldValues>({
             <Input
               {...field}
               {...rest}
+              type={type}
               label={label}
               required={required}
               maxLength={maxLength}
