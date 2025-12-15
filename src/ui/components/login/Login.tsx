@@ -59,7 +59,13 @@ export function Login() {
       </div>
 
       <FormProvider {...methods}>
-        <InputField label={dict.auth.login.email} type='email' name='email' required={true} />
+        <InputField
+          label={dict.auth.login.email}
+          type='email'
+          name='email'
+          required={true}
+          autoFocus
+        />
         <div className='w-full space-y-2'>
           <InputField
             label={dict.auth.login.password}
