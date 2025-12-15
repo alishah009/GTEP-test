@@ -29,7 +29,7 @@ export const FieldWrapper = ({
   }
 
   return (
-    <div className={cn('flex flex-col gap-y-[6px]', className)}>
+    <div className={cn('flex flex-col gap-y-[15px]', className)}>
       <FieldLabel
         config={{
           showLabel: config.showLabel,

@@ -93,7 +93,7 @@ export const SecondaryGrayButton = ({
       disabled={disabled}
       className={cn(
         'flex justify-center items-center shadow-xs py-[8px] px-[14px] font-semibold border-gray-300 text-gray-700 hover:text-gray-800 hover:bg-gray-50',
-        'text-sm gap-[8px] bg-white w-max h-max border-[1px]  rounded-[8px]  focus:outline-none',
+        'text-sm gap-[8px] bg-white w-max h-max border-[1px]  rounded-[15px]  focus:outline-none',
         {
           'border-error-300 text-error-700 hover:text-error-800 hover:bg-error-50': Destructive
         },
@@ -133,7 +133,7 @@ export const SecondaryButton = ({
       disabled={disabled}
       type={type as any}
       className={cn(
-        'flex justify-center items-center shadow-xs py-[8px] px-[14px] font-semibold text-sm gap-[8px] bg-primary-50 border-primary-50 text-primary-700 hover:text-primary-800 hover:bg-primary-100   w-max h-max border-[1px]  rounded-[8px] focus:outline-none ',
+        'flex justify-center items-center shadow-xs py-[8px] px-[14px] font-semibold text-sm gap-[8px] bg-primary-50 border-primary-50 text-primary-700 hover:text-primary-800 hover:bg-primary-100   w-max h-max border-[1px]  rounded-[15px] focus:outline-none ',
         {
           'bg-error-50 border-error-50 text-error-700 hover:text-error-800 hover:bg-error-100':
             Destructive
@@ -175,7 +175,7 @@ export const TertiaryButton = ({
       disabled={disabled}
       type={type as any}
       className={cn(
-        'flex justify-center items-center shadow-xs py-[8px] px-[14px] focus:outline-none gap-[8px] font-semibold text-sm bg-none w-max h-max rounded-[8px] text-gray-600 hover:text-gray-700 hover:bg-gray-50',
+        'flex justify-center items-center shadow-xs py-[8px] px-[14px] focus:outline-none gap-[8px] font-semibold text-sm bg-none w-max h-max rounded-[15px] text-gray-600 hover:text-gray-700 hover:bg-gray-50',
         {
           'text-error-600 hover:text-error-700 hover:bg-error-50': Destructive
         },
@@ -211,7 +211,7 @@ export const TertiaryPrimaryButton = ({
       type={type as any}
       disabled={disabled}
       className={cn(
-        'flex justify-center items-center shadow-xs py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-none w-max h-max rounded-[8px] text-primary-700 hover:text-primary-800 hover:bg-primary-50 focus:outline-none',
+        'flex justify-center items-center shadow-xs py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-none w-max h-max rounded-[15px] text-primary-700 hover:text-primary-800 hover:bg-primary-50 focus:outline-none',
         {
           'text-error-700 hover:text-error-800 hover:bg-error-50': Destructive
         },
@@ -247,7 +247,7 @@ export const LinkGrayButton = ({
       type={type as any}
       disabled={disabled}
       className={cn(
-        'flex justify-center items-center shadow-xs py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-none w-max h-max rounded-[8px] focus:outline-none text-gray-600 hover:text-gray-700',
+        'flex justify-center items-center shadow-xs py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-none w-max h-max rounded-[15px] focus:outline-none text-gray-600 hover:text-gray-700',
         { 'text-error-700 hover:text-error-800': Destructive },
         {
           'cursor-no-drop': disabled,
@@ -280,7 +280,7 @@ export const LinkDefaultButton = ({
       disabled={disabled}
       type={type}
       className={cn(
-        'flex justify-center items-center shadow-xs py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-none w-max h-max rounded-[8px] text-primary-700 hover:text-primary-800 focus:outline-none',
+        'flex justify-center items-center shadow-xs py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-none w-max h-max rounded-[15px] text-primary-700 hover:text-primary-800 focus:outline-none',
         { 'text-error-700 hover:text-error-800': Destructive },
         {
           '!text-error-300 !bg-none cursor-no-drop hover:!bg-transparent hover:!text-error-300':
@@ -357,7 +357,7 @@ export const SuccessButton = ({
       type={type as any}
       disabled={disabled}
       className={cn(
-        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-green-500 border-green-500 hover:bg-green-600 w-max h-max border-[1px] rounded-[8px] text-white hover:text-white focus:outline-none',
+        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-green-500 border-green-500 hover:bg-green-600 w-max h-max border-[1px] rounded-[15px] text-white hover:text-white focus:outline-none',
         {
           'bg-error-600 border-error-600 hover:bg-error-700': Destructive,
           'focus:shadow-ShadowError100': !disabled && Destructive,
@@ -396,7 +396,7 @@ export const DangerButton = ({
       type={type as any}
       disabled={disabled}
       className={cn(
-        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-error-600 border-error-600 hover:bg-error-700 w-max h-max border-[1px] rounded-[8px] text-white hover:text-white focus:outline-none',
+        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm bg-error-600 border-error-600 hover:bg-error-700 w-max h-max border-[1px] rounded-[15px] text-white hover:text-white focus:outline-none',
         {
           'bg-error-600 border-error-600 hover:bg-error-700': Destructive,
           'focus:shadow-ShadowError100': !disabled && Destructive,
@@ -435,7 +435,7 @@ export const GrayOutlineButton = ({
       type={type as any}
       disabled={disabled}
       className={cn(
-        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm text-gray-700  border-gray-300 hover:bg-gray-300 w-max h-max border-[1px] rounded-[8px] hover:text-white focus:outline-none',
+        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm text-gray-700  border-gray-300 hover:bg-gray-300 w-max h-max border-[1px] rounded-[15px] hover:text-white focus:outline-none',
         {
           'bg-error-600 border-error-600 hover:bg-error-700': Destructive,
           'focus:shadow-ShadowError100': !disabled && Destructive,
@@ -474,7 +474,7 @@ export const PrimaryOutlineButton = ({
       type={type as any}
       disabled={disabled}
       className={cn(
-        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm text-primary-600  border-primary-600 hover:bg-primary-600 w-max h-max border-[1px] rounded-[8px] hover:text-white focus:outline-none',
+        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm text-primary-600  border-primary-600 hover:bg-primary-600 w-max h-max border-[1px] rounded-[15px] hover:text-white focus:outline-none',
         {
           'bg-error-600 border-error-600 hover:bg-error-700': Destructive,
           'focus:shadow-ShadowError100': !disabled && Destructive,

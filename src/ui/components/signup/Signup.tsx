@@ -75,9 +75,13 @@ export function Signup() {
           suffixComponent={
             <button
               type='button'
-              onClick={() => setShowPassword((prev) => !prev)}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setShowPassword((prev) => !prev)
+              }}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
-              className='flex h-full items-center text-gray-500 hover:text-primary-600'
+              className='flex h-full items-center cursor-pointer text-gray-500 hover:text-primary-600 [&_svg]:cursor-pointer'
             >
               {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
             </button>

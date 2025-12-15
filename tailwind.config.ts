@@ -19,7 +19,8 @@ const config: Config = {
           700: 'var(--color-primary-700)',
           800: 'var(--color-primary-800)'
         },
-        brand: 'var(--color-brand)'
+        brand: 'var(--color-brand)',
+        'gray-base': 'var(--color-gray-base)'
       }
     }
   },

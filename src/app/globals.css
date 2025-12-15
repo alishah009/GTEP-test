@@ -35,6 +35,9 @@
   --color-error-600: #d92d20;
   --color-error-700: #b42318;
 
+  /* Neutral */
+  --color-gray-base: #979797;
+
   /* Box shadows used by buttons & inputs */
   --shadow-ButtonPrimary: 0px 1px 2px rgba(15, 23, 42, 0.08);
   --shadow-ButtonFocus: 0px 0px 0px 4px rgba(221, 91, 74, 0.25);
@@ -130,4 +133,34 @@ html.dark .border-gray-200 {
 /* Ensure icons inherit text color properly in dark mode */
 html.dark svg {
   color: inherit;
+}
+
+/* Checkbox styling for Remember Me */
+input[type='checkbox'] {
+  cursor: pointer;
+}
+
+/* Accessible focus styles for checkboxes - only visible for keyboard navigation */
+input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
+  border-color: var(--color-primary-600);
+}
+
+.ant-checkbox-wrapper {
+  cursor: pointer;
+}
+
+/* Accessible focus styles for Ant Design checkboxes - only visible for keyboard navigation */
+.ant-checkbox-wrapper .ant-checkbox:focus-visible,
+.ant-checkbox-wrapper .ant-checkbox:focus-visible .ant-checkbox-inner {
+  box-shadow: 0 0 0 2px rgba(221, 91, 74, 0.25);
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
+}
+
+.ant-checkbox-wrapper .ant-checkbox-input:focus-visible {
+  box-shadow: 0 0 0 2px rgba(221, 91, 74, 0.25);
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
 }

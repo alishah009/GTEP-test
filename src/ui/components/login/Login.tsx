@@ -8,9 +8,9 @@ import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 import { message } from 'antd'
 import { useLogin } from '@/hooks/mutation/useAuth'
 import { InputField } from '@/ui/Atoms/Input/InputField'
-import { Checkbox } from '@/ui/Atoms/Input/Checkbox/CheckboxField'
 import { Button } from '@/ui/Atoms/Button'
 import { useDictionary } from '@/hooks/i18n/useDictionary'
+import { CheckboxField } from '@/ui/Atoms/Input/Checkbox'
 
 type LoginFormType = {
   email: string
@@ -64,41 +64,47 @@ export function Login() {
           type='email'
           name='email'
           required={true}
+          className='!px-[14px] !py-[16px] !rounded-[15px]'
           autoFocus
           classNames={{
             label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
           }}
         />
-        <div className='w-full space-y-2'>
+        <div className='w-full space-y-[21px]'>
           <InputField
             label={dict.auth.login.password}
             type={showPassword ? 'text' : 'password'}
             suffixComponent={
               <button
                 type='button'
-                onClick={() => setShowPassword((prev) => !prev)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setShowPassword((prev) => !prev)
+                }}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
-                className='flex h-full items-center text-gray-500 hover:text-primary-600'
+                className='flex h-full items-center cursor-pointer text-gray-500 hover:text-primary-600 [&_svg]:cursor-pointer'
               >
                 {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
               </button>
             }
             name='password'
             required={true}
+            className='!px-[14px] !py-[16px] !rounded-[15px]'
             classNames={{
               label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
             }}
           />
           <div className='flex w-full items-center justify-between text-sm text-gray-500'>
-            <Checkbox
+            <CheckboxField
               name='rememberMe'
               label={
-                (dict.auth.login as Record<string, string | undefined>).rememberMe ?? 'Remember me'
+                (dict.auth.login as Record<string, string | undefined>).rememberMe ?? 'Remember Me'
               }
-              className='w-auto accent-primary-600'
+              className='w-auto'
               classNames={{
                 wrapper: 'flex-row items-center gap-2',
-                label: 'text-gray-500 text-sm font-medium',
+                label: 'text-gray-900 text-sm',
                 root: 'm-0 p-0'
               }}
               config={{ showOptional: false }}
@@ -114,7 +120,7 @@ export function Login() {
 
         <Button
           buttonType='Primary'
-          className='w-full!'
+          className='!w-full !h-[48px] cursor-pointer'
           type='submit'
           disabled={isPending}
           loading={isPending}
