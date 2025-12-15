@@ -2,10 +2,13 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useLogin } from '@/hooks/mutation/useAuth'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { InputField } from '@/ui/Atoms/Input/InputField'
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 import { message } from 'antd'
+import { useLogin } from '@/hooks/mutation/useAuth'
+import { InputField } from '@/ui/Atoms/Input/InputField'
+import { Checkbox } from '@/ui/Atoms/Input/Checkbox/CheckboxField'
 import { Button } from '@/ui/Atoms/Button'
 import { useDictionary } from '@/hooks/i18n/useDictionary'
 import { CheckboxField } from '@/ui/Atoms/Input/Checkbox'
@@ -19,6 +22,7 @@ type LoginFormType = {
 export function Login() {
   const { dict, loading: dictLoading, locale } = useDictionary()
   const methods = useForm<LoginFormType>({ defaultValues: { rememberMe: false } })
+  const [showPassword, setShowPassword] = useState(false)
 
   const { handleSubmit } = methods
   const [messageApi, contextHolder] = message.useMessage()
@@ -61,12 +65,22 @@ export function Login() {
           type='email'
           name='email'
           required={true}
-          className='px-[14px]! py-[16px]! rounded-[15px]!'
+          autoFocus
         />
-        <div className='w-full space-y-[21px]'>
+        <div className='w-full space-y-2'>
           <InputField
             label={dict.auth.login.password}
-            type='password'
+            type={showPassword ? 'text' : 'password'}
+            suffixComponent={
+              <button
+                type='button'
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                className='flex h-full items-center text-gray-500 hover:text-primary-600'
+              >
+                {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+              </button>
+            }
             name='password'
             required={true}
             className='px-[14px]! py-[16px]! rounded-[15px]!'
