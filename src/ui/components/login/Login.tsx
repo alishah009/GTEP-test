@@ -52,7 +52,7 @@ export function Login() {
       <Image height={40} width={160} src='/gtep.png' className='self-start' alt='logo' />
       <div className='w-full text-left'>
         <h1 className='mt-2 text-[32px] font-semibold'>{dict.auth.login.title}</h1>
-        <p className='text-[25px] text-gray-500'>{dict.auth.login.subtitle}</p>
+        <p className='text-[25px] text-black'>{dict.auth.login.subtitle}</p>
       </div>
 
       <FormProvider {...methods}>
