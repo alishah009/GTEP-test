@@ -316,8 +316,8 @@ export const PrimaryButton = ({
       disabled={disabled}
       type={type}
       className={cn(
-        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-semibold text-sm w-max h-max',
-        ' border-[1px] rounded-[15px] text-white hover:text-white focus:outline-none',
+        'flex justify-center items-center shadow-ButtonPrimary py-[8px] px-[14px] gap-[8px] font-bold text-sm w-max h-max',
+        ' border-[1px] rounded-[8px] text-white hover:text-white focus:outline-none',
         'bg-primary-600 border-primary-600 hover:bg-primary-700',
         {
           'bg-error-600 border-error-600 hover:bg-error-700': Destructive,

@@ -49,11 +49,26 @@ export function Signup() {
       <Image height={40} width={160} src='/gtep.png' className='self-start' alt='logo' />
       <div className='w-full text-left'>
         <h1 className='mt-2 text-2xl font-semibold '>{dict.auth.signup.title}</h1>
-        <p className='text-lg text-gray-500'>{dict.auth.signup.subtitle}</p>
+        <p className='text-lg font-normal'>{dict.auth.signup.subtitle}</p>
       </div>
       <FormProvider {...methods}>
-        <InputField label={dict.auth.signup.fullName} name='full_name' required={true} />
-        <InputField label={dict.auth.signup.email} type='email' name='email' required={true} />
+        <InputField
+          label={dict.auth.signup.fullName}
+          name='full_name'
+          required={true}
+          classNames={{
+            label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
+          }}
+        />
+        <InputField
+          label={dict.auth.signup.email}
+          type='email'
+          name='email'
+          required={true}
+          classNames={{
+            label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
+          }}
+        />
         <InputField
           label={dict.auth.signup.password}
           type={showPassword ? 'text' : 'password'}
@@ -73,6 +88,9 @@ export function Signup() {
           }
           name='password'
           required={true}
+          classNames={{
+            label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
+          }}
         />
         <Button
           buttonType='Primary'

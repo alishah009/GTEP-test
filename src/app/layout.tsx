@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import './globals.css'
 import { QueryProvider } from '@/providers/QueryProvider'
 import { AuthProvider } from '@/context/AuthContext'
@@ -7,14 +7,10 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import { SpinnerProvider } from '@/context/SpinnerContext'
 import { LocaleSetter } from '@/lib/i18n/LocaleSetter'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin']
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin']
+const poppins = Poppins({
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-poppins'
 })
 
 export const metadata: Metadata = {
@@ -38,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${poppins.variable} antialiased`}>
         <LocaleSetter />
         <ThemeProvider>
           <QueryProvider>
