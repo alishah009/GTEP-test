@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { useLogin } from '@/hooks/mutation/useAuth'
 import { FormProvider, useForm } from 'react-hook-form'
 import { InputField } from '@/ui/Atoms/Input/InputField'
-import { Checkbox } from '@/ui/Atoms/Input/Checkbox/CheckboxField'
 import { message } from 'antd'
 import { Button } from '@/ui/Atoms/Button'
 import { useDictionary } from '@/hooks/i18n/useDictionary'
+import { CheckboxField } from '@/ui/Atoms/Input/Checkbox'
 
 type LoginFormType = {
   email: string
@@ -51,29 +51,35 @@ export function Login() {
       {contextHolder}
       <Image height={40} width={160} src='/gtep.png' className='self-start' alt='logo' />
       <div className='w-full text-left'>
-        <h1 className='mt-2 text-2xl font-semibold'>{dict.auth.login.title}</h1>
-        <p className='text-lg text-gray-500 '>{dict.auth.login.subtitle}</p>
+        <h1 className='mt-2 text-[32px] font-semibold'>{dict.auth.login.title}</h1>
+        <p className='text-[25px] text-gray-500'>{dict.auth.login.subtitle}</p>
       </div>
 
       <FormProvider {...methods}>
-        <InputField label={dict.auth.login.email} type='email' name='email' required={true} />
-        <div className='w-full space-y-2'>
+        <InputField
+          label={dict.auth.login.email}
+          type='email'
+          name='email'
+          required={true}
+          className='px-[14px]! py-[16px]! rounded-[15px]!'
+        />
+        <div className='w-full space-y-[21px]'>
           <InputField
             label={dict.auth.login.password}
             type='password'
             name='password'
             required={true}
+            className='px-[14px]! py-[16px]! rounded-[15px]!'
           />
           <div className='flex w-full items-center justify-between text-sm text-gray-500'>
-            <Checkbox
+            <CheckboxField
               name='rememberMe'
               label={
                 (dict.auth.login as Record<string, string | undefined>).rememberMe ?? 'Remember me'
               }
-              className='w-auto accent-primary-600'
+              className='w-auto'
               classNames={{
-                wrapper: 'flex-row items-center gap-2',
-                label: 'text-gray-900 text-sm',
+                wrapper: 'flex-row items-center gap-[6px]',
                 root: 'm-0 p-0'
               }}
               config={{ showOptional: false }}
@@ -89,7 +95,7 @@ export function Login() {
 
         <Button
           buttonType='Primary'
-          className='w-full!'
+          className='w-full! h-[48px]! cursor-pointer'
           type='submit'
           disabled={isPending}
           loading={isPending}

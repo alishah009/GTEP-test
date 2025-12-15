@@ -30,7 +30,9 @@ export const FieldLabel = ({
 
   return (
     <ConditionalRender render={config.showLabelContainer}>
-      <div className={cn('font-medium text-base text-gray-700 min-h-[0px]', className)}>
+      <div
+        className={cn('font-medium text-[14px] text-gray-base min-h-0', className)}
+      >
         <ConditionalRender render={config.showLabel}>
           <>
             {label}

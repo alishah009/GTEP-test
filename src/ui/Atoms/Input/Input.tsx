@@ -5,7 +5,7 @@ import { CommonInputProps } from 'rc-input/lib/interface'
 
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputClassNames, InputConfig } from '@/ui/Atoms/Input/utils/InputConfig'
-import { ReactNode } from 'react'
+import { ReactNode, useId } from 'react'
 type InputSizes = {
   [key in InputSize]: string
 }
@@ -50,6 +50,7 @@ export const Input = ({
   ...rest
 }: CustomInputProps) => {
   const { label: labelClass, wrapper, ...restClasses } = classNames
+  const generatedId = useId()
 
   function suitableType(inputType: string | undefined | null) {
     switch (inputType) {
@@ -62,6 +63,52 @@ export const Input = ({
       default:
         return type
     }
+  }
+
+  // Handle checkbox type specially - wrap input in label for clickability
+  if (type === 'Checkbox') {
+    const {
+      value,
+      onChange,
+      name,
+      disabled,
+      id,
+      onBlur
+    } = rest
+    const inputId = id || name || `checkbox-${generatedId}`
+    const checked = value !== undefined && value !== null && value !== '' ? !!value : false
+    
+    return (
+      <FieldWrapper
+        config={{ ...config, showLabel: false }}
+        className={wrapper}
+        error={error}
+        label={label}
+        labelClass={labelClass}
+        required={required}
+      >
+        <label
+          htmlFor={inputId}
+          className={cn('flex items-center gap-[6px] cursor-pointer', labelClass)}
+        >
+          <input
+            id={inputId}
+            name={name}
+            type='checkbox'
+            checked={checked}
+            onChange={onChange}
+            onBlur={onBlur}
+            disabled={disabled}
+            className={cn(
+              'cursor-pointer accent-primary-600',
+              'focus:shadow-none focus:outline-none focus-visible:outline-none',
+              className
+            )}
+          />
+          {label && <span className='text-gray-base text-[12px] select-none'>{label}</span>}
+        </label>
+      </FieldWrapper>
+    )
   }
 
   return (
@@ -83,10 +130,10 @@ export const Input = ({
         classNames={restClasses}
         className={cn(
           InputSizeConfig[inputSize || 'md'],
-          'hover:!border-primary-600 focus:!border-primary-600 focus:!ring-0 focus:!shadow-[0_0_0_4px_rgba(221,91,74,0.15)]',
+          'border-[0.5px] hover:border-primary-600! focus:border-[0.5px]! focus:border-primary-600! focus:ring-0! focus:shadow-none!',
           className,
           {
-            '!border-red-500 focus:!border-red-500 hover:!border-red-500 focus:shadow-ShadowError100 AddOnStyle':
+            'border-red-500! focus:border-red-500! hover:border-red-500! focus:shadow-ShadowError100 AddOnStyle':
               error
           }
         )}

@@ -21,7 +21,11 @@ export const metadata: Metadata = {
   title: 'GTEP',
   description: 'GTEP platform',
   icons: {
-    icon: '/gtep.png',
+    icon: [
+      { url: '/gtep.png', type: 'image/png' },
+      { url: '/gtep.png', type: 'image/png', sizes: '32x32' },
+      { url: '/gtep.png', type: 'image/png', sizes: '16x16' }
+    ],
     shortcut: '/gtep.png',
     apple: '/gtep.png'
   }
