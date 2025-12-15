@@ -5,7 +5,7 @@ import { CommonInputProps } from 'rc-input/lib/interface'
 
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputClassNames, InputConfig } from '@/ui/Atoms/Input/utils/InputConfig'
-import { ReactNode, useId } from 'react'
+import { ReactNode, useId, ChangeEvent } from 'react'
 type InputSizes = {
   [key in InputSize]: string
 }
@@ -70,7 +70,17 @@ export const Input = ({
   if (type === 'Checkbox') {
     const { value, onChange, name, disabled, id, onBlur } = rest
     const inputId = id || name || `checkbox-${generatedId}`
-    const checked = value !== undefined && value !== null && value !== '' ? !!value : false
+    // Only treat null, undefined, or empty string as unset; values like 0 should be handled correctly
+    const checked = value !== null && value !== undefined && value !== '' ? Boolean(value) : false
+
+    // Define proper onChange handler for checkbox - accepts native ChangeEvent<HTMLInputElement>
+    // Ant Design's InputProps onChange is compatible with native ChangeEvent<HTMLInputElement>
+    const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+      if (onChange) {
+        // onChange from InputProps accepts ChangeEvent<HTMLInputElement> for native inputs
+        onChange(e)
+      }
+    }
 
     return (
       <FieldWrapper
@@ -90,7 +100,7 @@ export const Input = ({
             name={name}
             type='checkbox'
             checked={checked}
-            onChange={onChange}
+            onChange={handleCheckboxChange}
             onBlur={onBlur}
             disabled={disabled}
             className={cn(

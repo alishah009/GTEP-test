@@ -140,27 +140,27 @@ input[type='checkbox'] {
   cursor: pointer;
 }
 
-input[type='checkbox']:focus,
-input[type='checkbox']:focus-visible,
-input[type='checkbox']:focus-within {
-  box-shadow: none !important;
-  outline: none !important;
-  border-color: inherit;
+/* Accessible focus styles for checkboxes - only visible for keyboard navigation */
+input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
+  border-color: var(--color-primary-600);
 }
 
 .ant-checkbox-wrapper {
   cursor: pointer;
 }
 
-.ant-checkbox-wrapper .ant-checkbox:focus,
+/* Accessible focus styles for Ant Design checkboxes - only visible for keyboard navigation */
 .ant-checkbox-wrapper .ant-checkbox:focus-visible,
-.ant-checkbox-wrapper .ant-checkbox:focus-within {
-  box-shadow: none !important;
-  outline: none !important;
+.ant-checkbox-wrapper .ant-checkbox:focus-visible .ant-checkbox-inner {
+  box-shadow: 0 0 0 2px rgba(221, 91, 74, 0.25);
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
 }
 
-.ant-checkbox-wrapper .ant-checkbox-input:focus,
 .ant-checkbox-wrapper .ant-checkbox-input:focus-visible {
-  box-shadow: none !important;
-  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(221, 91, 74, 0.25);
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
 }

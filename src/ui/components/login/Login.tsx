@@ -64,7 +64,7 @@ export function Login() {
           type='email'
           name='email'
           required={true}
-          className='px-[14px]! py-[16px]! rounded-[15px]!'
+          className='!px-[14px] !py-[16px] !rounded-[15px]'
           autoFocus
           classNames={{
             label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
@@ -90,7 +90,7 @@ export function Login() {
             }
             name='password'
             required={true}
-            className='px-[14px]! py-[16px]! rounded-[15px]!'
+            className='!px-[14px] !py-[16px] !rounded-[15px]'
             classNames={{
               label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
             }}
@@ -99,7 +99,7 @@ export function Login() {
             <CheckboxField
               name='rememberMe'
               label={
-                (dict.auth.login as Record<string, string | undefined>).rememberMe ?? 'Remember me'
+                (dict.auth.login as Record<string, string | undefined>).rememberMe ?? 'Remember Me'
               }
               className='w-auto'
               classNames={{
@@ -120,7 +120,7 @@ export function Login() {
 
         <Button
           buttonType='Primary'
-          className='w-full! h-[48px]! cursor-pointer'
+          className='!w-full !h-[48px] cursor-pointer'
           type='submit'
           disabled={isPending}
           loading={isPending}
