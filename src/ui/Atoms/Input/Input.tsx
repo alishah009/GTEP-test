@@ -143,7 +143,7 @@ export const Input = ({
           'focus-within:!border-primary-600 focus-within:!shadow-none',
           className,
           {
-            '!border-red-500 focus:!border-red-500 hover:!border-red-500 focus:!shadow-ShadowError100 focus:!outline-none AddOnStyle':
+            '!border-red-500 focus:!border-red-500 hover:!border-red-500 focus:!shadow-ShadowError100 focus:!outline-none':
               error
           }
         )}

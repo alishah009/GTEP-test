@@ -164,33 +164,3 @@ input[type='checkbox']:focus-visible {
   outline: 2px solid var(--color-primary-600);
   outline-offset: 2px;
 }
-
-/* Override Ant Design input default focus styles (remove blue border/shadow) */
-.ant-input:focus,
-.ant-input:focus-within,
-.ant-input-focused {
-  border-color: var(--color-primary-600);
-  box-shadow: none;
-  outline: none;
-}
-
-.ant-input:hover {
-  border-color: var(--color-primary-600);
-}
-
-/* Override Ant Design password input focus styles */
-.ant-input-password:focus,
-.ant-input-password:focus-within,
-.ant-input-password.ant-input-affix-wrapper:focus,
-.ant-input-password.ant-input-affix-wrapper-focused {
-  border-color: var(--color-primary-600);
-  box-shadow: none;
-  outline: none;
-}
-
-.ant-input-affix-wrapper:focus,
-.ant-input-affix-wrapper-focused {
-  border-color: var(--color-primary-600);
-  box-shadow: none;
-  outline: none;
-}
