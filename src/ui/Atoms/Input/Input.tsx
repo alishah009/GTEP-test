@@ -136,10 +136,14 @@ export const Input = ({
         classNames={restClasses}
         className={cn(
           InputSizeConfig[inputSize || 'md'],
-          'border-[0.5px] border-gray-300! hover:border-primary-600! focus:border-[0.5px]! focus:border-primary-600! focus:ring-0! focus:shadow-none! focus-within:border-primary-600!',
+          '!border-[0.5px] !border-gray-300 !outline-none',
+          'hover:!border-primary-600',
+          'focus:!border-[0.5px] focus:!border-primary-600 focus:!ring-0 focus:!shadow-none focus:!outline-none',
+          'focus-visible:!shadow-none focus-visible:!outline-none',
+          'focus-within:!border-primary-600 focus-within:!shadow-none',
           className,
           {
-            'border-red-500! focus:border-red-500! hover:border-red-500! focus:shadow-ShadowError100 AddOnStyle':
+            '!border-red-500 focus:!border-red-500 hover:!border-red-500 focus:!shadow-ShadowError100 focus:!outline-none AddOnStyle':
               error
           }
         )}
