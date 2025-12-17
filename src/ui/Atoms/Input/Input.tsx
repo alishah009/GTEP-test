@@ -5,7 +5,8 @@ import { CommonInputProps } from 'rc-input/lib/interface'
 
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputClassNames, InputConfig } from '@/ui/Atoms/Input/utils/InputConfig'
-import { ReactNode, useId, ChangeEvent } from 'react'
+import { useInputId } from '@/ui/utils/useInputId'
+import { ReactNode, ChangeEvent } from 'react'
 type InputSizes = {
   [key in InputSize]: string
 }
@@ -50,8 +51,11 @@ export const Input = ({
   ...rest
 }: CustomInputProps) => {
   const { label: labelClass, wrapper, ...restClasses } = classNames
-  const generatedId = useId()
   const isEmail = type === 'email'
+
+  // Call hooks at the top level (before any conditional returns)
+  const checkboxId = useInputId(rest.id, rest.name, 'checkbox')
+  const regularInputId = useInputId(rest.id, rest.name)
 
   function suitableType(inputType: string | undefined | null) {
     switch (inputType) {
@@ -68,8 +72,8 @@ export const Input = ({
 
   // Handle checkbox type specially - wrap input in label for clickability
   if (type === 'Checkbox') {
-    const { value, onChange, name, disabled, id, onBlur } = rest
-    const inputId = id || name || `checkbox-${generatedId}`
+    const { value, onChange, name, disabled, onBlur } = rest
+    const inputId = checkboxId
     // Only treat null, undefined, or empty string as unset; values like 0 should be handled correctly
     const checked = value !== null && value !== undefined && value !== '' ? Boolean(value) : false
 
@@ -90,6 +94,7 @@ export const Input = ({
         label={label}
         labelClass={labelClass}
         required={required}
+        inputId={inputId}
       >
         <label
           htmlFor={inputId}
@@ -115,7 +120,7 @@ export const Input = ({
     )
   }
 
-  const inputId = rest.id || rest.name || `input-${generatedId}`
+  const inputId = regularInputId
 
   return (
     <FieldWrapper

@@ -2,6 +2,7 @@
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputClassNames, InputConfig } from '@/ui/Atoms/Input/utils/InputConfig'
+import { useInputId } from '@/ui/utils/useInputId'
 import { cn } from '@/ui/utils/cn'
 import { Rate, RateProps } from 'antd'
 import { useState } from 'react'
@@ -33,6 +34,7 @@ export const RankingButton = <T extends FieldValues>({
 }: Props<T>) => {
   const [rankingValue, setRankingValue] = useState(0)
   const { label: labelClass, wrapper } = classNames
+  const inputId = useInputId(rest.id, rest.name as string, 'ranking')
 
   return (
     <Responsive responsive={responsive}>
@@ -43,6 +45,7 @@ export const RankingButton = <T extends FieldValues>({
         error={error}
         required={required}
         className={cn('flex flex-col gap-[6px]', wrapper)}
+        inputId={inputId}
       >
         <style>{`
           li.ant-rate-star {
@@ -56,6 +59,8 @@ export const RankingButton = <T extends FieldValues>({
         `}</style>
         <input type='hidden' name={rest?.name} value={rankingValue} />
         <Rate
+          id={inputId}
+          aria-labelledby={label ? `${inputId}-label` : undefined}
           disabled={rest.disabled}
           value={rest?.value}
           onChange={(value: any) => {
