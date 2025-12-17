@@ -11,13 +11,15 @@ export interface FieldLabelProps {
   }
   required?: boolean
   className?: string
+  inputId?: string
 }
 
 export const FieldLabel = ({
   className,
   config = { showLabel: true, showOptional: true, showLabelContainer: true },
   label,
-  required
+  required,
+  inputId
 }: FieldLabelProps) => {
   {
     /* Input Field Label
@@ -28,18 +30,32 @@ export const FieldLabel = ({
 
   config = { showLabel: true, showOptional: true, showLabelContainer: true, ...config }
 
+  const labelContent = (
+    <ConditionalRender render={config.showLabel}>
+      <>
+        {label}
+        <ConditionalRender render={config.showOptional && !required}>
+          <OptionalText />
+        </ConditionalRender>
+      </>
+    </ConditionalRender>
+  )
+
   return (
     <ConditionalRender render={config.showLabelContainer}>
-      <div className={cn('font-medium text-[14px] text-gray-base min-h-0', className)}>
-        <ConditionalRender render={config.showLabel}>
-          <>
-            {label}
-            <ConditionalRender render={config.showOptional && !required}>
-              <OptionalText />
-            </ConditionalRender>
-          </>
-        </ConditionalRender>
-      </div>
+      {inputId ? (
+        <label
+          id={inputId ? `${inputId}-label` : undefined}
+          htmlFor={inputId}
+          className={cn('font-medium text-[14px] text-gray-base min-h-0', className)}
+        >
+          {labelContent}
+        </label>
+      ) : (
+        <div className={cn('font-medium text-[14px] text-gray-base min-h-0', className)}>
+          {labelContent}
+        </div>
+      )}
     </ConditionalRender>
   )
 }

@@ -1,6 +1,7 @@
 import { IResponsive, Responsive } from '@/ui/Atoms/Grid/Responsive'
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputClassNames, InputConfig } from '@/ui/Atoms/Input/utils/InputConfig'
+import { useInputId } from '@/ui/utils/useInputId'
 import { cn } from '@/ui/utils/cn'
 import { Radio, RadioProps } from 'antd'
 import { JSX } from 'react'
@@ -34,9 +35,12 @@ export const RadioButton = <T extends FieldValues, V>({
   classNames = {},
   config,
   responsive,
+  name,
   ...rest
 }: Props<T, V>) => {
   const { label: labelClass, wrapper } = classNames
+  const inputId = useInputId(rest.id, name as string, 'radio')
+
   return (
     <Responsive responsive={responsive}>
       <FieldWrapper
@@ -46,31 +50,34 @@ export const RadioButton = <T extends FieldValues, V>({
         error={error}
         required={required}
         className={cn('flex flex-col gap-[6px]', wrapper)}
+        inputId={inputId}
       >
-        <Radio.Group {...rest} className={cn(className)}>
-          {constant.map((item, index) => (
-            <Radio type='button' key={index} value={item.key}>
-              {renderer ? (
-                <div
-                  onClick={() => {
-                    if (rest.onChange) {
-                      rest.onChange({
-                        target: {
-                          value: item.key
-                        }
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      } as any)
-                    }
-                  }}
-                >
-                  {renderer(item.value, item.key === rest.value, !!error)}
-                </div>
-              ) : (
-                (item.value as string)
-              )}
-            </Radio>
-          ))}
-        </Radio.Group>
+        <div id={inputId} aria-labelledby={label ? `${inputId}-label` : undefined}>
+          <Radio.Group {...rest} className={cn(className)}>
+            {constant.map((item, index) => (
+              <Radio type='button' key={index} value={item.key}>
+                {renderer ? (
+                  <div
+                    onClick={() => {
+                      if (rest.onChange) {
+                        rest.onChange({
+                          target: {
+                            value: item.key
+                          }
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        } as any)
+                      }
+                    }}
+                  >
+                    {renderer(item.value, item.key === rest.value, !!error)}
+                  </div>
+                ) : (
+                  (item.value as string)
+                )}
+              </Radio>
+            ))}
+          </Radio.Group>
+        </div>
       </FieldWrapper>
     </Responsive>
   )

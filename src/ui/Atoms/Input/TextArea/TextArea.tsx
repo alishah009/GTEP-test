@@ -6,6 +6,7 @@ import { CommonInputProps } from 'rc-input/lib/interface'
 
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputClassNames, InputConfig } from '@/ui/Atoms/Input/utils/InputConfig'
+import { useInputId } from '@/ui/utils/useInputId'
 import { cn } from '@/ui/utils/cn'
 
 type A = CommonInputProps['classNames']
@@ -32,9 +33,11 @@ export const TextArea = ({
   config,
   className,
   classNames = {},
+  name,
   ...rest
 }: Props) => {
   const { label: labelClass, wrapper, ...restClasses } = classNames
+  const inputId = useInputId(rest.id, name, 'textarea')
 
   return (
     <FieldWrapper
@@ -44,9 +47,12 @@ export const TextArea = ({
       label={label}
       labelClass={labelClass}
       required={required}
+      inputId={inputId}
     >
       <Input.TextArea
         {...rest}
+        id={inputId}
+        aria-labelledby={label ? `${inputId}-label` : undefined}
         rows={rows}
         className={cn(
           {

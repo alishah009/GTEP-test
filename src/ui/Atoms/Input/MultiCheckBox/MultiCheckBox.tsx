@@ -1,4 +1,5 @@
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
+import { useInputId } from '@/ui/utils/useInputId'
 import { cn } from '@/ui/utils/cn'
 import { Checkbox } from 'antd'
 import React from 'react'
@@ -38,9 +39,12 @@ export const MultiCheckBox = ({
   disabled,
   field,
   required,
-  config
+  config,
+  name
 }: TestProps) => {
   const { label: labelClass, wrapper } = classNames
+  const inputId = useInputId(undefined, name, 'multicheckbox')
+
   return (
     <FieldWrapper
       labelClass={labelClass}
@@ -49,21 +53,23 @@ export const MultiCheckBox = ({
       error={error}
       required={required}
       className={cn('flex flex-col gap-[6px]', wrapper)}
+      inputId={inputId}
     >
-      <Checkbox.Group
-        {...field}
+      <div
+        id={inputId}
+        aria-labelledby={label ? `${inputId}-label` : undefined}
         style={{ width: '100%' }}
-        className={className}
-        disabled={disabled}
       >
-        <div className='flex gap-[10px] flex-wrap'>
-          {constant.map((item, index) => (
-            <div key={index}>
-              <Checkbox value={item.key}>{item.value}</Checkbox>
-            </div>
-          ))}
-        </div>
-      </Checkbox.Group>
+        <Checkbox.Group {...field} className={className} disabled={disabled}>
+          <div className='flex gap-[10px] flex-wrap'>
+            {constant.map((item, index) => (
+              <div key={index}>
+                <Checkbox value={item.key}>{item.value}</Checkbox>
+              </div>
+            ))}
+          </div>
+        </Checkbox.Group>
+      </div>
     </FieldWrapper>
   )
 }

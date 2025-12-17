@@ -3,6 +3,7 @@ import { CustomInputProps } from '@/ui/Atoms/Input/Input'
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputConfig, InputFieldClassNames } from '@/ui/Atoms/Input/utils/InputConfig'
 import { getNestedError } from '@/ui/Atoms/Input/utils/getNestedError'
+import { useInputId } from '@/ui/utils/useInputId'
 import { Editor } from '@tinymce/tinymce-react'
 import { useEffect, useState } from 'react'
 import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
@@ -39,6 +40,7 @@ export const RichTextEditorField = <T extends FieldValues>({
   }, [warning])
 
   const { wrapper, label: labelClass } = classNames
+  const inputId = useInputId(undefined, name as string, 'richtext')
 
   return (
     <Responsive responsive={responsive}>
@@ -49,6 +51,7 @@ export const RichTextEditorField = <T extends FieldValues>({
         label={label}
         labelClass={labelClass}
         required={required}
+        inputId={inputId}
       >
         <Controller
           name={name}
@@ -58,6 +61,8 @@ export const RichTextEditorField = <T extends FieldValues>({
           control={methods.control}
           render={({ field: { onChange } }) => (
             <Editor
+              id={inputId}
+              aria-labelledby={label ? `${inputId}-label` : undefined}
               value={methods.getValues().content}
               apiKey={env.tinymce.apiKey}
               init={{

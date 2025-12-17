@@ -1,6 +1,7 @@
 import { FieldWrapper } from '@/ui/Atoms/Input/utils/FieldWrapper'
 import { InputClassNames, InputConfig } from '@/ui/Atoms/Input/utils/InputConfig'
 import { ConditionalRender } from '@/ui/Atoms/Wrapper/ConditionalRender'
+import { useInputId } from '@/ui/utils/useInputId'
 import { cn } from '@/ui/utils/cn'
 import { Select as AntSelect, SelectProps } from 'antd'
 import { ReactNode } from 'react'
@@ -49,9 +50,11 @@ export const Select = ({
   showSearch = true,
   popupMatchSelectWidth = true,
   classNames = { label: '' },
+  name,
   ...rest
 }: Props) => {
   const { label: labelClass, wrapper } = classNames
+  const inputId = useInputId(rest.id, name, 'select')
 
   return (
     <FieldWrapper
@@ -61,9 +64,12 @@ export const Select = ({
       label={label}
       labelClass={labelClass}
       required={required}
+      inputId={inputId}
     >
       <ConditionalRender render={!prefixComponent}>
         <AntSelect
+          id={inputId}
+          aria-labelledby={label ? `${inputId}-label` : undefined}
           popupMatchSelectWidth={popupMatchSelectWidth}
           {...rest}
           showSearch={showSearch}
@@ -91,6 +97,8 @@ export const Select = ({
           <div className='flex items-center '>
             <div className={' text-center w-[10%]'}> {prefixComponent}</div>
             <AntSelect
+              id={inputId}
+              aria-labelledby={label ? `${inputId}-label` : undefined}
               {...rest}
               popupMatchSelectWidth={popupMatchSelectWidth}
               showSearch

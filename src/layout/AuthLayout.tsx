@@ -37,9 +37,9 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
       </div>
 
       {/* Content panel */}
-      <div className='flex w-full flex-col items-center justify-center px-6 py-12 lg:w-[35%] lg:px-12'>
+      <main className='flex w-full flex-col items-center justify-center px-6 py-12 lg:w-[35%] lg:px-12'>
         <div className='w-full max-w-md  bg-white '>{children}</div>
-      </div>
+      </main>
     </div>
   )
 }
