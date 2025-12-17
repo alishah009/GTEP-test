@@ -64,7 +64,7 @@ export function Login() {
           type='email'
           name='email'
           required={true}
-          className='!px-[14px] !py-[16px] !rounded-[15px]'
+          className='!px-[14px] !py-[13px] !rounded-[15px]'
           autoFocus
           classNames={{
             label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
@@ -83,14 +83,14 @@ export function Login() {
                   setShowPassword((prev) => !prev)
                 }}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
-                className='flex h-full items-center cursor-pointer text-gray-500 hover:text-primary-600 [&_svg]:cursor-pointer'
+                className='flex h-full items-center cursor-pointer text-gray-500 px-2 py-2 hover:text-primary-600 [&_svg]:cursor-pointer'
               >
                 {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
               </button>
             }
             name='password'
             required={true}
-            className='!px-[14px] !py-[16px] !rounded-[15px]'
+            className='!px-[14px] !py-[9.3px] !rounded-[15px]'
             classNames={{
               label: 'text-gray-500 font-medium text-sm' // Change this to any color you want, e.g., 'text-primary-600', 'text-red-500', etc.
             }}
@@ -120,7 +120,7 @@ export function Login() {
 
         <Button
           buttonType='Primary'
-          className='!w-full !h-[48px] cursor-pointer'
+          className='!w-full !h-[48px] rounded-[15px] cursor-pointer'
           type='submit'
           disabled={isPending}
           loading={isPending}

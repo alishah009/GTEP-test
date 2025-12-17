@@ -115,6 +115,8 @@ export const Input = ({
     )
   }
 
+  const inputId = rest.id || rest.name || `input-${generatedId}`
+
   return (
     <FieldWrapper
       config={config}
@@ -123,10 +125,13 @@ export const Input = ({
       label={label}
       labelClass={labelClass}
       required={required}
+      inputId={inputId}
     >
       {/* Input Field */}
       <AntDInput
         {...rest}
+        id={inputId}
+        aria-labelledby={label ? `${inputId}-label` : undefined}
         // Use text type for email to avoid native browser validation tooltips; rely on custom validation instead.
         type={isEmail ? 'text' : suitableType(fieldType)}
         inputMode={isEmail ? 'email' : rest.inputMode}

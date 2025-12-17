@@ -10,6 +10,7 @@ export interface FieldWrapperProps extends FieldLabelProps {
   error?: string
   config?: InputConfig
   labelClass?: string
+  inputId?: string
 }
 export const FieldWrapper = ({
   config = { showError: true, showLabel: true, showOptional: true, showLabelContainer: true },
@@ -18,7 +19,8 @@ export const FieldWrapper = ({
   required,
   children,
   error,
-  labelClass
+  labelClass,
+  inputId
 }: FieldWrapperProps) => {
   config = {
     showError: true,
@@ -40,6 +42,7 @@ export const FieldWrapper = ({
         key='FormLabel'
         label={label}
         required={required}
+        inputId={inputId}
       />
       {children}
       {/* Input Field Error
