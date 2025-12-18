@@ -35,7 +35,7 @@ export function AppNavbar({ onToggleSidebar }: AppNavbarProps) {
           onClick={onToggleSidebar}
           aria-label={dict.navigation.toggleSidebar}
         >
-          <MenuOutlined />
+          <MenuOutlined aria-hidden='true' />
         </button>
         <Image
           src='/gtep.png'
@@ -61,13 +61,13 @@ export function AppNavbar({ onToggleSidebar }: AppNavbarProps) {
           onClick={toggleTheme}
         >
           {theme === 'dark' ? (
-            <MoonOutlined className='text-lg text-gray-700' />
+            <MoonOutlined className='text-lg text-gray-700' aria-hidden='true' />
           ) : (
-            <SunOutlined className='text-lg text-gray-700' />
+            <SunOutlined className='text-lg text-gray-700' aria-hidden='true' />
           )}
         </button>
         <button className='relative rounded-full' aria-label={dict.navigation.notifications}>
-          <BellOutlined className='text-lg text-gray-700' />
+          <BellOutlined className='text-lg text-gray-700' aria-hidden='true' />
           {notificationCount > 0 ? (
             <span className='absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full bg-primary-500 text-[10px] font-semibold leading-none text-white'>
               {notificationCount > 99 ? '99+' : notificationCount}

@@ -52,7 +52,7 @@ export const TextArea = ({
       <Input.TextArea
         {...rest}
         id={inputId}
-        aria-labelledby={label ? `${inputId}-label` : undefined}
+        aria-labelledby={inputId ? `${inputId}-label` : undefined}
         rows={rows}
         className={cn(
           {

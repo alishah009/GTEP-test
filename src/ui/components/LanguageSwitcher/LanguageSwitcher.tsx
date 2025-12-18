@@ -74,6 +74,7 @@ export function LanguageSwitcher() {
           className={`ml-1 max-[400px]:ml-0.5 text-xs max-[400px]:text-[10px] transition-transform duration-200 ${
             isOpen ? 'rotate-180 text-primary-600' : 'text-gray-400'
           }`}
+          aria-hidden='true'
         />
       </button>
 
@@ -113,7 +114,7 @@ export function LanguageSwitcher() {
                         </span>
                       </div>
                     </div>
-                    {isActive && <CheckOutlined className='text-primary-600' />}
+                    {isActive && <CheckOutlined className='text-primary-600' aria-hidden='true' />}
                   </div>
                 </button>
               )

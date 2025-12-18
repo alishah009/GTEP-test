@@ -57,7 +57,7 @@ export const MultiCheckBox = ({
     >
       <div
         id={inputId}
-        aria-labelledby={label ? `${inputId}-label` : undefined}
+        aria-labelledby={inputId ? `${inputId}-label` : undefined}
         style={{ width: '100%' }}
       >
         <Checkbox.Group {...field} className={className} disabled={disabled}>

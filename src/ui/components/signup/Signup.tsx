@@ -83,7 +83,11 @@ export function Signup() {
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               className='flex h-full items-center cursor-pointer text-gray-500 hover:text-primary-600 [&_svg]:cursor-pointer'
             >
-              {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+              {showPassword ? (
+                <EyeInvisibleOutlined aria-hidden='true' />
+              ) : (
+                <EyeOutlined aria-hidden='true' />
+              )}
             </button>
           }
           name='password'

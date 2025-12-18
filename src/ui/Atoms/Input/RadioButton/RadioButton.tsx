@@ -52,7 +52,7 @@ export const RadioButton = <T extends FieldValues, V>({
         className={cn('flex flex-col gap-[6px]', wrapper)}
         inputId={inputId}
       >
-        <div id={inputId} aria-labelledby={label ? `${inputId}-label` : undefined}>
+        <div id={inputId} aria-labelledby={inputId ? `${inputId}-label` : undefined}>
           <Radio.Group {...rest} className={cn(className)}>
             {constant.map((item, index) => (
               <Radio type='button' key={index} value={item.key}>

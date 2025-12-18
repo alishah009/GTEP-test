@@ -69,7 +69,7 @@ export const Select = ({
       <ConditionalRender render={!prefixComponent}>
         <AntSelect
           id={inputId}
-          aria-labelledby={label ? `${inputId}-label` : undefined}
+          aria-labelledby={inputId ? `${inputId}-label` : undefined}
           popupMatchSelectWidth={popupMatchSelectWidth}
           {...rest}
           showSearch={showSearch}
@@ -98,7 +98,7 @@ export const Select = ({
             <div className={' text-center w-[10%]'}> {prefixComponent}</div>
             <AntSelect
               id={inputId}
-              aria-labelledby={label ? `${inputId}-label` : undefined}
+              aria-labelledby={inputId ? `${inputId}-label` : undefined}
               {...rest}
               popupMatchSelectWidth={popupMatchSelectWidth}
               showSearch

@@ -136,7 +136,7 @@ export const Input = ({
       <AntDInput
         {...rest}
         id={inputId}
-        aria-labelledby={label ? `${inputId}-label` : undefined}
+        aria-labelledby={inputId ? `${inputId}-label` : undefined}
         // Use text type for email to avoid native browser validation tooltips; rely on custom validation instead.
         type={isEmail ? 'text' : suitableType(fieldType)}
         inputMode={isEmail ? 'email' : rest.inputMode}

@@ -62,7 +62,7 @@ export const RichTextEditorField = <T extends FieldValues>({
           render={({ field: { onChange } }) => (
             <Editor
               id={inputId}
-              aria-labelledby={label ? `${inputId}-label` : undefined}
+              aria-labelledby={inputId ? `${inputId}-label` : undefined}
               value={methods.getValues().content}
               apiKey={env.tinymce.apiKey}
               init={{
