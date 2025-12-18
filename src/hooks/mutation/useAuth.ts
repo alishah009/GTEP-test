@@ -9,6 +9,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { User } from '@/entity/User'
 import { MessageInstance } from 'antd/es/message/interface'
+import { Role } from '@/enum/User'
 
 // Login mutation
 export function useLogin(
@@ -93,7 +94,7 @@ export function useSignup(messageApi: MessageInstance) {
         options: {
           data: {
             full_name: user.full_name,
-            role: 'customer'
+            role: Role.CUSTOMER
           }
         }
       })
