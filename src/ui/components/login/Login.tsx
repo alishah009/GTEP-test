@@ -85,7 +85,11 @@ export function Login() {
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                 className='flex h-full items-center cursor-pointer text-gray-500 px-2 py-2 hover:text-primary-600 [&_svg]:cursor-pointer'
               >
-                {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                {showPassword ? (
+                  <EyeInvisibleOutlined aria-hidden='true' />
+                ) : (
+                  <EyeOutlined aria-hidden='true' />
+                )}
               </button>
             }
             name='password'

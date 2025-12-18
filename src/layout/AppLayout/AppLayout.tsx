@@ -159,7 +159,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
             onClick={toggleSidebar}
             aria-label={dict.navigation.closeSidebar}
           >
-            <CloseOutlined />
+            <CloseOutlined aria-hidden='true' />
           </button>
         </div>
 
@@ -237,7 +237,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
               className='mt-4 flex w-full items-center gap-3 rounded-full px-3 py-2 text-sm font-semibold text-[#F25555] transition hover:text-[#d94444]'
             >
               <span className='flex h-8 w-8 items-center justify-center rounded-full bg-[#FFE3DF]'>
-                <ArrowRightOutlined />
+                <ArrowRightOutlined aria-hidden='true' />
               </span>
               {dict.navigation.logout}
             </button>

@@ -60,7 +60,7 @@ export const RankingButton = <T extends FieldValues>({
         <input type='hidden' name={rest?.name} value={rankingValue} />
         <Rate
           id={inputId}
-          aria-labelledby={label ? `${inputId}-label` : undefined}
+          aria-labelledby={inputId ? `${inputId}-label` : undefined}
           disabled={rest.disabled}
           value={rest?.value}
           onChange={(value: any) => {
