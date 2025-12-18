@@ -44,12 +44,23 @@ jest.mock('@/ui/Atoms/Input/InputField', () => ({
   )
 }))
 
-// Mock Ant Design message
+// Mock Ant Design message and Alert
 const messageApiMock = jest.fn()
 jest.mock('antd', () => ({
   message: {
     useMessage: () => [messageApiMock, <div key='message-context' />]
-  }
+  },
+  Alert: ({ message, type, showIcon, closable, onClose, className }: any) => (
+    <div data-testid='success-alert' data-type={type} className={className} role='alert'>
+      {showIcon && <span data-testid='alert-icon'>✓</span>}
+      <span>{message}</span>
+      {closable && (
+        <button data-testid='alert-close' onClick={onClose} aria-label='Close alert'>
+          ×
+        </button>
+      )}
+    </div>
+  )
 }))
 
 const mockDictionary = {
@@ -217,6 +228,61 @@ describe('Signup Component', () => {
 
       await waitFor(() => {
         expect(errorMock).toHaveBeenCalled()
+      })
+
+      // Success message should not be shown on error
+      expect(screen.queryByTestId('success-alert')).not.toBeInTheDocument()
+    })
+
+    it('shows success message after successful signup', async () => {
+      render(<Signup />)
+
+      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement
+      const emailInput = screen.getByLabelText('Email') as HTMLInputElement
+      const passwordInput = screen.getByLabelText('Password') as HTMLInputElement
+      const submitButton = screen.getByRole('button', { name: 'Sign Up' })
+
+      fireEvent.change(fullNameInput, { target: { value: 'John Doe' } })
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+      fireEvent.change(passwordInput, { target: { value: 'password123' } })
+      fireEvent.click(submitButton)
+
+      await waitFor(() => {
+        expect(mutateAsyncMock).toHaveBeenCalled()
+      })
+
+      await waitFor(() => {
+        const successAlert = screen.getByTestId('success-alert')
+        expect(successAlert).toBeInTheDocument()
+        expect(successAlert).toHaveAttribute('data-type', 'success')
+        expect(successAlert).toHaveTextContent(
+          'An email has been sent to you. Please verify your email and then login.'
+        )
+      })
+    })
+
+    it('allows closing the success message', async () => {
+      render(<Signup />)
+
+      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement
+      const emailInput = screen.getByLabelText('Email') as HTMLInputElement
+      const passwordInput = screen.getByLabelText('Password') as HTMLInputElement
+      const submitButton = screen.getByRole('button', { name: 'Sign Up' })
+
+      fireEvent.change(fullNameInput, { target: { value: 'John Doe' } })
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+      fireEvent.change(passwordInput, { target: { value: 'password123' } })
+      fireEvent.click(submitButton)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('success-alert')).toBeInTheDocument()
+      })
+
+      const closeButton = screen.getByTestId('alert-close')
+      fireEvent.click(closeButton)
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('success-alert')).not.toBeInTheDocument()
       })
     })
   })
