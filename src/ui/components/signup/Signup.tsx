@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
-import { message } from 'antd'
+import { message, Alert } from 'antd'
 import { useSignup } from '@/hooks/mutation/useAuth'
 import { InputField } from '@/ui/Atoms/Input/InputField'
 import { Button } from '@/ui/Atoms/Button'
@@ -16,6 +16,7 @@ export function Signup() {
   const { dict, loading: dictLoading, locale } = useDictionary()
   const methods = useForm<User>({})
   const [showPassword, setShowPassword] = useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   const { handleSubmit } = methods
   const [messageApi, contextHolder] = message.useMessage()
@@ -24,7 +25,9 @@ export function Signup() {
   const signup = async ({ email, password, full_name }: User) => {
     try {
       await mutateAsync({ email, password, full_name, id: '' })
+      setShowSuccessMessage(true)
     } catch {
+      setShowSuccessMessage(false)
       // noImp
     }
   }
@@ -101,6 +104,16 @@ export function Signup() {
         >
           {dict.auth.signup.submitButton}
         </Button>
+        {showSuccessMessage && (
+          <Alert
+            message='An email has been sent to you. Please verify your email and then login.'
+            type='success'
+            showIcon
+            className='w-full'
+            closable
+            onClose={() => setShowSuccessMessage(false)}
+          />
+        )}
       </FormProvider>
       <p className='text-center mt-4 text-sm'>
         {dict.auth.signup.loginLink}{' '}

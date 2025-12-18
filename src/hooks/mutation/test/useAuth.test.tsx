@@ -287,7 +287,7 @@ describe('useAuth Mutations', () => {
     }
 
     describe('Business Logic - User Creation', () => {
-      it('should create auth user with email and password', async () => {
+      it('should create auth user with email, password, and metadata', async () => {
         const mockAuthData = {
           user: mockAuthUser,
           session: null
@@ -295,15 +295,6 @@ describe('useAuth Mutations', () => {
         ;(supabase.auth.signUp as jest.Mock).mockResolvedValue({
           data: mockAuthData,
           error: null
-        })
-
-        const mockInsert = jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            single: jest.fn().mockResolvedValue({ data: {}, error: null })
-          })
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
         })
 
         const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
@@ -316,7 +307,13 @@ describe('useAuth Mutations', () => {
 
         expect(supabase.auth.signUp).toHaveBeenCalledWith({
           email: mockUser.email,
-          password: mockUser.password
+          password: mockUser.password,
+          options: {
+            data: {
+              full_name: mockUser.full_name,
+              role: 'customer'
+            }
+          }
         })
         expect(supabase.auth.signUp).toHaveBeenCalledTimes(1)
       })
@@ -337,35 +334,11 @@ describe('useAuth Mutations', () => {
         })
 
         expect(result.current.error).toEqual(authError)
-        // Should not attempt to create profile if auth fails
-        expect(supabase.from).not.toHaveBeenCalled()
-      })
-
-      it('should not create profile if user id is missing', async () => {
-        const mockAuthData = {
-          user: null,
-          session: null
-        }
-        ;(supabase.auth.signUp as jest.Mock).mockResolvedValue({
-          data: mockAuthData,
-          error: null
-        })
-
-        const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
-
-        result.current.mutate(mockUser)
-
-        await waitFor(() => {
-          expect(result.current.isSuccess).toBe(true)
-        })
-
-        // Should not attempt to create profile if user.id is missing
-        expect(supabase.from).not.toHaveBeenCalled()
       })
     })
 
     describe('Business Logic - Profile Creation', () => {
-      it('should create user profile with correct data after auth success', async () => {
+      it('should store user metadata for database trigger', async () => {
         const mockAuthData = {
           user: mockAuthUser,
           session: null
@@ -373,16 +346,6 @@ describe('useAuth Mutations', () => {
         ;(supabase.auth.signUp as jest.Mock).mockResolvedValue({
           data: mockAuthData,
           error: null
-        })
-
-        const mockSelect = jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: {}, error: null })
-        })
-        const mockInsert = jest.fn().mockReturnValue({
-          select: mockSelect
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
         })
 
         const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
@@ -393,15 +356,20 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(supabase.from).toHaveBeenCalledWith('users')
-        expect(mockInsert).toHaveBeenCalledWith({
-          id: mockAuthUser.id,
-          full_name: mockUser.full_name,
-          role: Role.CUSTOMER
-        })
+        // Verify that metadata is passed to signUp for the database trigger
+        expect(supabase.auth.signUp).toHaveBeenCalledWith(
+          expect.objectContaining({
+            options: {
+              data: {
+                full_name: mockUser.full_name,
+                role: 'customer'
+              }
+            }
+          })
+        )
       })
 
-      it('should assign CUSTOMER role to new users', async () => {
+      it('should always use customer role in metadata regardless of user object role', async () => {
         const mockAuthData = {
           user: mockAuthUser,
           session: null
@@ -411,19 +379,9 @@ describe('useAuth Mutations', () => {
           error: null
         })
 
-        const mockSelect = jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: {}, error: null })
-        })
-        const mockInsert = jest.fn().mockReturnValue({
-          select: mockSelect
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
-        })
-
         const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
 
-        // User object might have a different role, but signup should always use CUSTOMER
+        // User object might have a different role, but signup should always use 'customer'
         const userWithDifferentRole = { ...mockUser, role: Role.ADMIN }
         result.current.mutate(userWithDifferentRole)
 
@@ -431,43 +389,16 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(mockInsert).toHaveBeenCalledWith(
+        expect(supabase.auth.signUp).toHaveBeenCalledWith(
           expect.objectContaining({
-            role: Role.CUSTOMER
+            options: {
+              data: {
+                full_name: mockUser.full_name,
+                role: 'customer'
+              }
+            }
           })
         )
-      })
-
-      it('should throw error when profile creation fails', async () => {
-        const mockAuthData = {
-          user: mockAuthUser,
-          session: null
-        }
-        ;(supabase.auth.signUp as jest.Mock).mockResolvedValue({
-          data: mockAuthData,
-          error: null
-        })
-
-        const profileError = { message: 'Database error', status: 500 }
-        const mockSelect = jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: null, error: profileError })
-        })
-        const mockInsert = jest.fn().mockReturnValue({
-          select: mockSelect
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
-        })
-
-        const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
-
-        result.current.mutate(mockUser)
-
-        await waitFor(() => {
-          expect(result.current.isError).toBe(true)
-        })
-
-        expect(result.current.error).toEqual(profileError)
       })
     })
 
@@ -480,16 +411,6 @@ describe('useAuth Mutations', () => {
         ;(supabase.auth.signUp as jest.Mock).mockResolvedValue({
           data: mockAuthData,
           error: null
-        })
-
-        const mockSelect = jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: {}, error: null })
-        })
-        const mockInsert = jest.fn().mockReturnValue({
-          select: mockSelect
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
         })
 
         const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
@@ -507,7 +428,7 @@ describe('useAuth Mutations', () => {
     })
 
     describe('Business Logic - Navigation', () => {
-      it('should redirect to login page on successful signup', async () => {
+      it('should not redirect to login page (navigation is commented out)', async () => {
         const mockAuthData = {
           user: mockAuthUser,
           session: null
@@ -515,16 +436,6 @@ describe('useAuth Mutations', () => {
         ;(supabase.auth.signUp as jest.Mock).mockResolvedValue({
           data: mockAuthData,
           error: null
-        })
-
-        const mockSelect = jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: {}, error: null })
-        })
-        const mockInsert = jest.fn().mockReturnValue({
-          select: mockSelect
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
         })
 
         const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
@@ -535,8 +446,8 @@ describe('useAuth Mutations', () => {
           expect(result.current.isSuccess).toBe(true)
         })
 
-        expect(mockRouter.push).toHaveBeenCalledWith('/login')
-        expect(mockRouter.push).toHaveBeenCalledTimes(1)
+        // Navigation is currently commented out in the implementation
+        expect(mockRouter.push).not.toHaveBeenCalled()
       })
     })
 
@@ -549,16 +460,6 @@ describe('useAuth Mutations', () => {
         ;(supabase.auth.signUp as jest.Mock).mockResolvedValue({
           data: mockAuthData,
           error: null
-        })
-
-        const mockSelect = jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: {}, error: null })
-        })
-        const mockInsert = jest.fn().mockReturnValue({
-          select: mockSelect
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
         })
 
         const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
@@ -589,16 +490,6 @@ describe('useAuth Mutations', () => {
           error: null
         })
 
-        const mockSelect = jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: {}, error: null })
-        })
-        const mockInsert = jest.fn().mockReturnValue({
-          select: mockSelect
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
-        })
-
         const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
 
         result.current.mutate(mockUser)
@@ -610,7 +501,7 @@ describe('useAuth Mutations', () => {
         expect(mockMessageApi.open).toHaveBeenCalledWith({
           key: 'SignupResponse',
           type: 'success',
-          content: 'Signup Successfully'
+          content: 'An email has been sent to you. Please verify your email and then login.'
         })
       })
 
@@ -634,43 +525,6 @@ describe('useAuth Mutations', () => {
           key: 'SignupResponse',
           type: 'error',
           content: String(authError) // This is what the code actually does for non-Error objects
-        })
-      })
-
-      it('should show error message when profile creation fails', async () => {
-        const mockAuthData = {
-          user: mockAuthUser,
-          session: null
-        }
-        ;(supabase.auth.signUp as jest.Mock).mockResolvedValue({
-          data: mockAuthData,
-          error: null
-        })
-
-        const profileError = { message: 'Failed to create profile', status: 500 }
-        const mockSelect = jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: null, error: profileError })
-        })
-        const mockInsert = jest.fn().mockReturnValue({
-          select: mockSelect
-        })
-        ;(supabase.from as jest.Mock).mockReturnValue({
-          insert: mockInsert
-        })
-
-        const { result } = renderHook(() => useSignup(mockMessageApi), { wrapper })
-
-        result.current.mutate(mockUser)
-
-        await waitFor(() => {
-          expect(result.current.isError).toBe(true)
-        })
-
-        // The error handler converts non-Error objects using String(), which results in "[object Object]"
-        expect(mockMessageApi.open).toHaveBeenCalledWith({
-          key: 'SignupResponse',
-          type: 'error',
-          content: String(profileError) // This is what the code actually does for non-Error objects
         })
       })
     })

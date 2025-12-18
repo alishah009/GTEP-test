@@ -8,8 +8,8 @@ import {
 } from '@/lib/supabase/supabaseBrowser'
 import { useRouter } from 'next/navigation'
 import { User } from '@/entity/User'
-import { Role } from '@/enum/User'
 import { MessageInstance } from 'antd/es/message/interface'
+import { Role } from '@/enum/User'
 
 // Login mutation
 export function useLogin(
@@ -81,45 +81,37 @@ export function useLogin(
 // Signup mutation
 export function useSignup(messageApi: MessageInstance) {
   const queryClient = useQueryClient()
-  const router = useRouter()
+  // const router = useRouter()
   const supabase = getSupabaseClient()
 
   return useMutation({
     mutationFn: async (user: User) => {
       // Create user in Supabase Auth
+      // Store full_name and role in user metadata so the database trigger can access it
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: user.email!,
-        password: user.password!
+        password: user.password!,
+        options: {
+          data: {
+            full_name: user.full_name,
+            role: Role.CUSTOMER
+          }
+        }
       })
       if (authError) {
         throw authError
       }
-      // Insert user profile into 'users' table
-      if (authData.user?.id) {
-        const { error: profileError } = await supabase
-          .from('users')
-          // @ts-expect-error - Supabase type inference issue with users table
-          .insert({
-            id: authData.user.id,
-            full_name: user.full_name,
-            role: Role.CUSTOMER
-          })
-          .select()
-          .single()
-
-        if (profileError) {
-          throw profileError
-        }
-      }
+      // User profile will be automatically created by database trigger
+      // No need to manually insert into 'users' table
       return authData
     },
     onSuccess: () => {
       messageApi.open({
         key: 'SignupResponse',
         type: 'success',
-        content: 'Signup Successfully'
+        content: 'An email has been sent to you. Please verify your email and then login.'
       })
-      router.push('/login')
+      //router.push('/login')
       queryClient.invalidateQueries({ queryKey: ['session'] })
     },
     onMutate: () => {
