@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  ci:
+    name: status check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run ESLint
+        run: yarn lint
+
+      - name: Run TypeScript type check
+        run: yarn type-check
+
+      - name: Run tests
+        run: yarn test
+        env:
+          CI: true
+
+      - name: Set environment variables
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.base_ref }}" == "main" ]]; then
+            echo "APP_ENV=production" >> $GITHUB_ENV
+          else
+            echo "APP_ENV=staging" >> $GITHUB_ENV
+          fi
+
+      - name: Clear build cache
+        run: |
+          rm -rf .next
+          rm -rf node_modules/.cache
+          echo "Cache cleared"
+
+      - name: Build application
+        run: yarn build
+        env:
+          # Using placeholders for CI - Vercel will use real env vars for deployment
+          # If you want to use real values, add them as GitHub Secrets:
+          # Settings → Secrets and variables → Actions
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key' }}
